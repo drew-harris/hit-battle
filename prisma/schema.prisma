@@ -70,11 +70,12 @@ model Song {
 
     artist     String
     artistId   String
+    nameHash   String  @unique
     album      String
     albumId    String
-    albumArt   String
-    previewUrl String
-    popularity Int
+    albumArt   String?
+    previewUrl String?
+    popularity Int?
 
     stemifyLink String?
 
@@ -121,4 +122,10 @@ model Vote {
     forUserId String
 
     submittedAt DateTime @default(now())
+}
+
+model SpotifyCreds {
+    id      String   @id @default(cuid())
+    token   String
+    expires DateTime
 }
