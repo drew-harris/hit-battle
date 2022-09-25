@@ -46,8 +46,9 @@ model User {
     accounts      Account[]
     sessions      Session[]
 
-    Song  Song?
-    Votes Vote[]
+    song          Song?
+    votes         Vote[]
+    recievedVotes Vote[] @relation("recievedVotes")
 }
 
 model VerificationToken {
@@ -90,11 +91,14 @@ model Vote {
     Match   Match?  @relation(fields: [matchId], references: [id])
     matchId String?
 
-    user   User?   @relation(fields: [userId], references: [id])
-    userId String?
+    user   User   @relation(fields: [userId], references: [id])
+    userId String
 
     for   Song   @relation(fields: [forId], references: [id])
     forId String
+
+    forUser   User   @relation(fields: [forUserId], references: [id], name: "recievedVotes")
+    forUserId String
 
     submittedAt DateTime @default(now())
 }
