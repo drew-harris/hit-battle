@@ -46,9 +46,12 @@ model User {
     accounts      Account[]
     sessions      Session[]
 
+    isMod Boolean @default(false)
+
     song          Song?
     votes         Vote[]
-    recievedVotes Vote[] @relation("recievedVotes")
+    recievedVotes Vote[]    @relation("recievedVotes")
+    comments      Comment[]
 }
 
 model VerificationToken {
@@ -66,7 +69,9 @@ model Song {
     userId String? @unique
 
     artist     String
+    artistId   String
     album      String
+    albumId    String
     albumArt   String
     previewUrl String
     popularity Int
@@ -78,11 +83,26 @@ model Song {
 }
 
 model Match {
-    id   String   @id @unique @default(cuid())
-    date DateTime
+    id         String   @id @unique @default(cuid())
+    date       DateTime
+    isFeatured Boolean  @default(false)
 
     songs Song[]
     votes Vote[]
+
+    comments Comment[]
+}
+
+model Comment {
+    id      String   @id @default(cuid())
+    content String
+    date    DateTime @default(now())
+
+    user   User   @relation(fields: [userId], references: [id])
+    userId String
+
+    match   Match  @relation(fields: [matchId], references: [id])
+    matchId String
 }
 
 model Vote {
