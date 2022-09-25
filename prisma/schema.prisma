@@ -6,16 +6,8 @@ generator client {
 }
 
 datasource db {
-    provider = "sqlite"
-    // NOTE: When using postgresql, mysql or sqlserver, uncomment the @db.text annotations in model Account below
-    // Further reading: 
-    // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-    // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
+    provider = "postgresql"
     url      = env("DATABASE_URL")
-}
-
-model Example {
-    id String @id @default(cuid())
 }
 
 // Necessary for Next auth
@@ -25,12 +17,12 @@ model Account {
     type              String
     provider          String
     providerAccountId String
-    refresh_token     String? //@db.Text
-    access_token      String? //@db.Text
+    refresh_token     String?
+    access_token      String?
     expires_at        Int?
     token_type        String?
     scope             String?
-    id_token          String? //@db.Text
+    id_token          String?
     session_state     String?
     user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -53,6 +45,9 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+
+    Song  Song?
+    Votes Vote[]
 }
 
 model VerificationToken {
@@ -61,4 +56,45 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Song {
+    id     String  @id @unique
+    title  String
+    user   User?   @relation(fields: [userId], references: [id])
+    userId String? @unique
+
+    artist     String
+    album      String
+    albumArt   String
+    previewUrl String
+    popularity Int
+
+    stemifyLink String?
+
+    Matches Match[]
+    Votes   Vote[]
+}
+
+model Match {
+    id   String   @id @unique @default(cuid())
+    date DateTime
+
+    songs Song[]
+    votes Vote[]
+}
+
+model Vote {
+    id String @id @unique @default(cuid())
+
+    Match   Match?  @relation(fields: [matchId], references: [id])
+    matchId String?
+
+    user   User?   @relation(fields: [userId], references: [id])
+    userId String?
+
+    for   Song   @relation(fields: [forId], references: [id])
+    forId String
+
+    submittedAt DateTime @default(now())
 }
