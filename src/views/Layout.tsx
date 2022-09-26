@@ -59,7 +59,7 @@ export default function Layout({ children }: LayoutProps) {
           return <RouteButton route={route} key={route.path}></RouteButton>;
         })}
       </nav>
-      <div className="w-full px-8">{children}</div>
+      <div className="w-full px-8 pb-8">{children}</div>
     </>
   );
 }

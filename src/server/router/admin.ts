@@ -137,7 +137,8 @@ export const adminRouter = createAdminRouter()
               (track) =>
                 !track.name.includes("Edited") &&
                 !track.name.includes("Album Version") &&
-                !track.name.includes("Instrumental")
+                !track.name.includes("Instrumental") &&
+                track.artists[0]?.name === input.name
             )
             .map((track) => {
               return {
@@ -190,9 +191,48 @@ export const adminRouter = createAdminRouter()
         });
         console.log(songs);
         return songs;
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.log(error);
-        throw new Error(error?.message || "Error getting all songs");
+        throw new Error("Error getting all songs");
       }
+    },
+  })
+
+  .query("dashboard-info", {
+    resolve: async ({ ctx }) => {
+      const songsCountPromise = ctx.prisma.song.count();
+      const artistsCountPromise = ctx.prisma.song.groupBy({
+        by: ["artistId"],
+      });
+      const userCountPromise = ctx.prisma.user.count();
+      const voteCountPromise = ctx.prisma.vote.count();
+      const matchCountPromise = ctx.prisma.match.count();
+      const mostPopularSongPromise = ctx.prisma.song.findFirst({
+        orderBy: [{ Votes: { _count: "asc" } }],
+      });
+
+      const [
+        songsCount,
+        artistCount,
+        userCount,
+        voteCount,
+        matchCount,
+        mostPopularSong,
+      ] = await Promise.all([
+        songsCountPromise,
+        artistsCountPromise,
+        userCountPromise,
+        voteCountPromise,
+        matchCountPromise,
+        mostPopularSongPromise,
+      ]);
+      return {
+        songsCount,
+        artistCount: artistCount.length,
+        userCount,
+        voteCount,
+        matchCount,
+        mostPopularSong,
+      };
     },
   });

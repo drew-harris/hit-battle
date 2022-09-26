@@ -39,13 +39,15 @@ export default function AddArtistPage() {
   }) {
     return (
       <div className="flex items-center justify-between gap-4 rounded-md bg-tan-100 p-3 shadow-sm">
-        {artist?.images[2]?.url && (
-          <img
-            className="h-12 w-12 rounded-full object-fill"
-            src={artist.images[2].url}
-          ></img>
-        )}
-        <div>{artist.name}</div>
+        <div className="flex items-center gap-4">
+          {artist?.images[2]?.url && (
+            <img
+              className="h-12 w-12 rounded-full object-cover shadow-sm"
+              src={artist.images[2].url}
+            ></img>
+          )}
+          <div>{artist.name}</div>
+        </div>
         {artistIds?.includes(artist.id) ? (
           <div>Added</div>
         ) : (
@@ -69,7 +71,8 @@ export default function AddArtistPage() {
         value={formInput}
         onChange={(e) => setFormInput(e.target.value)}
       />
-      <div className="mt-4 flex max-w-sm flex-col items-stretch gap-4">
+      <div className="mt-4 flex max-w-lg flex-col items-stretch gap-4">
+        {addArtistMutation.status === "loading" && <div>Adding artist...</div>}
         {status === "loading" && <div>Loading...</div>}
         {data &&
           data.artists.items.map((artist) => (
