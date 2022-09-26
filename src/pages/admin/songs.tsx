@@ -20,6 +20,11 @@ export default function SongsPage() {
       ["admin.all-songs"],
       (data) => data?.filter((song) => song.id !== id) || []
     );
+    deleteMutation.mutate(id, {
+      onError: () => {
+        refetch();
+      },
+    });
   };
 
   return (
