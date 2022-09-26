@@ -249,4 +249,28 @@ export const adminRouter = createAdminRouter()
         throw new Error("Error getting all users");
       }
     },
+  })
+
+  .mutation("ban-user", {
+    input: z.string(),
+    resolve: async ({ ctx, input }) => {
+      const user = await ctx.prisma.user.delete({
+        where: { id: input },
+      });
+      return user;
+    },
+  })
+
+  .mutation("delete-song", {
+    input: z.string(),
+    resolve: async ({ ctx, input }) => {
+      try {
+        const song = await ctx.prisma.song.delete({
+          where: { id: input },
+        });
+        return song;
+      } catch (error) {
+        throw new Error("Error deleting song");
+      }
+    },
   });

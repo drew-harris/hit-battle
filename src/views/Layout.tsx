@@ -16,7 +16,7 @@ interface Route {
 
 export default function Layout({ children }: LayoutProps) {
   const session = useSession();
-  if (!session.data) {
+  if (!session.data && !(session.status === "loading")) {
     return <>{children}</>;
   }
 
@@ -53,7 +53,7 @@ export default function Layout({ children }: LayoutProps) {
       </header>
       <nav className="flex gap-2 overflow-x-scroll p-4 ">
         {routes.map((route) => {
-          if (route.modOnly && !session.data.user?.isMod) {
+          if (route.modOnly && !session?.data?.user?.isMod) {
             return null;
           }
           return <RouteButton route={route} key={route.path}></RouteButton>;

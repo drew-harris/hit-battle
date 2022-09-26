@@ -5,6 +5,7 @@ import { trpc } from "../../utils/trpc";
 
 export default function AddArtistPage() {
   const [formInput, setFormInput] = useState("");
+  const client = trpc.useContext();
   const { data, status } = trpc.useQuery(["admin.artist-search", formInput]);
   const { data: artistIds, refetch } = trpc.useQuery([
     "admin.added-artist-ids",
@@ -12,7 +13,11 @@ export default function AddArtistPage() {
   const addArtistMutation = trpc.useMutation(["admin.add-artist"]);
 
   const addArtist = async (id: string, name: string) => {
-    console.log("Adding artist");
+    client.setQueryData(
+      ["admin.added-artist-ids"],
+      (prev) => [...(prev || []), id] || []
+    );
+
     await addArtistMutation.mutate(
       { id, name },
       {
@@ -72,8 +77,10 @@ export default function AddArtistPage() {
         onChange={(e) => setFormInput(e.target.value)}
       />
       <div className="mt-4 flex max-w-lg flex-col items-stretch gap-4">
-        {addArtistMutation.status === "loading" && <div>Adding artist...</div>}
-        {status === "loading" && <div>Loading...</div>}
+        {addArtistMutation.status === "loading" && (
+          <div>Adding artist... Please wait</div>
+        )}
+        {status === "loading" && <div>Loading... </div>}
         {data &&
           data.artists.items.map((artist) => (
             <Artist
