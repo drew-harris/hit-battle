@@ -1,8 +1,12 @@
 import Button from "../../components/input/Button";
 import { trpc } from "../../utils/trpc";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 export default function SongsPage() {
   const { data, error, refetch, status } = trpc.useQuery(["admin.all-songs"]);
+
+  const addMutaiton = trpc.useMutation("admin.setup-matchups");
+  const [parent] = useAutoAnimate<HTMLDivElement>();
   const client = trpc.useContext();
   const nukeMutation = trpc.useMutation(["admin.nuke-all-songs"]);
   const deleteMutation = trpc.useMutation(["admin.delete-song"]);
@@ -42,7 +46,10 @@ export default function SongsPage() {
       {status === "loading" && (
         <div className="mx-auto text-center">Loading...</div>
       )}
-      <div className="grid grid-flow-row grid-cols-1 text-ellipsis break-words md:grid-cols-2 xl:grid-cols-3">
+      <div
+        ref={parent}
+        className="grid grid-flow-row grid-cols-1 text-ellipsis break-words md:grid-cols-2 xl:grid-cols-3"
+      >
         {data &&
           data.map((song) => (
             <div

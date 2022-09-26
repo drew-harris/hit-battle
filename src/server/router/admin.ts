@@ -1,7 +1,10 @@
-import { Prisma } from "@prisma/client";
-import { z } from "zod";
+import { z, ZodType } from "zod";
+import { v4 as uuidv4 } from "uuid";
 import { getNewToken } from "../utils/spotify";
 import { createAdminRouter } from "./context";
+import shuffleArray, * as Shuffle from "shuffle-array";
+import { Match, Prisma, Song } from "@prisma/client";
+import { MatchWithSong } from "../../types/match";
 
 export const adminRouter = createAdminRouter()
   .query("artist-search", {
@@ -149,6 +152,7 @@ export const adminRouter = createAdminRouter()
                 artistId: input.id,
                 title: track.name,
                 previewUrl: track.preview_url,
+                trackNum: track.track_number,
                 id: track.id,
                 nameHash: input.name + "-" + track.name,
               };
@@ -187,7 +191,7 @@ export const adminRouter = createAdminRouter()
     resolve: async ({ ctx }) => {
       try {
         const songs = await ctx.prisma.song.findMany({
-          orderBy: [{ artist: "asc" }, { album: "asc" }],
+          orderBy: [{ artist: "asc" }, { album: "asc" }, { trackNum: "asc" }],
         });
         console.log(songs);
         return songs;
@@ -206,7 +210,20 @@ export const adminRouter = createAdminRouter()
       });
       const userCountPromise = ctx.prisma.user.count();
       const voteCountPromise = ctx.prisma.vote.count();
-      const matchCountPromise = ctx.prisma.match.count();
+      const rigntNow = new Date();
+      const currentMatchCountPromise = ctx.prisma.match.count({
+        where: {
+          endDate: {
+            gte: rigntNow,
+          },
+          startDate: {
+            lte: rigntNow,
+          },
+        },
+      });
+
+      const totalMatchCountPromise = ctx.prisma.match.count();
+
       const mostPopularSongPromise = ctx.prisma.song.findFirst({
         orderBy: [{ Votes: { _count: "asc" } }],
       });
@@ -216,14 +233,16 @@ export const adminRouter = createAdminRouter()
         artistCount,
         userCount,
         voteCount,
-        matchCount,
+        currentMatchCount,
+        totalMatchCount,
         mostPopularSong,
       ] = await Promise.all([
         songsCountPromise,
         artistsCountPromise,
         userCountPromise,
         voteCountPromise,
-        matchCountPromise,
+        currentMatchCountPromise,
+        totalMatchCountPromise,
         mostPopularSongPromise,
       ]);
       return {
@@ -231,7 +250,8 @@ export const adminRouter = createAdminRouter()
         artistCount: artistCount.length,
         userCount,
         voteCount,
-        matchCount,
+        currentMatchCount,
+        totalMatchCount,
         mostPopularSong,
       };
     },
@@ -271,6 +291,94 @@ export const adminRouter = createAdminRouter()
         return song;
       } catch (error) {
         throw new Error("Error deleting song");
+      }
+    },
+  })
+
+  .mutation("setup-matchups", {
+    input: z.object({
+      numMatchups: z.number(),
+      groupSize: z.number().min(2),
+      startDate: z.date(),
+      endDate: z.date().optional(),
+    }),
+    resolve: async ({ ctx, input }) => {
+      try {
+        const songsCount = await ctx.prisma.song.count();
+        const songs = await ctx.prisma.song.findMany({
+          take: input.numMatchups * input.groupSize,
+          skip: Math.floor(Math.random() * (songsCount - input.numMatchups)),
+        });
+        shuffleArray(songs);
+
+        const matches: Prisma.MatchCreateInput[] = [];
+        for (let i = 0; i < songs.length; i += input.groupSize) {
+          const group = songs.slice(i, i + input.groupSize);
+          const match: Prisma.MatchCreateInput = {
+            songs: {
+              connect: group.map((song) => ({ id: song.id })),
+            },
+            startDate: input.startDate,
+            endDate:
+              input.endDate ||
+              new Date(input.startDate.getTime() + 24 * 60 * 60 * 1000),
+            id: uuidv4(),
+          };
+          matches.push(match);
+        }
+
+        return matches;
+      } catch (error) {
+        throw new Error("could not create matchups");
+      }
+    },
+  })
+
+  .mutation("submit-matchups", {
+    input: z.array(z.any()) as ZodType<Prisma.MatchCreateInput[]>,
+    resolve: async ({ ctx, input }) => {
+      try {
+        const matches: MatchWithSong[] = [];
+        for (const match of input) {
+          const newMatch = await ctx.prisma.match.create({
+            data: match,
+            include: { songs: true },
+          });
+
+          matches.push(newMatch);
+        }
+        return matches;
+      } catch (error) {
+        throw new Error("could not submit matchups");
+      }
+    },
+  })
+
+  .query("all-matches", {
+    resolve: async ({ ctx }) => {
+      try {
+        const matches = await ctx.prisma.match.findMany({
+          orderBy: [{ startDate: "asc" }],
+          include: {
+            songs: true,
+          },
+        });
+        return matches;
+      } catch (error: unknown) {
+        console.log(error);
+        throw new Error("Error getting all matches");
+      }
+    },
+  })
+
+  .mutation("delete-matches", {
+    resolve: async ({ ctx }) => {
+      try {
+        const matches = await ctx.prisma.match.deleteMany({});
+        return matches;
+      } catch (error: unknown) {
+        console.log(error);
+        throw new Error("Error deleting matches");
       }
     },
   });

@@ -34,8 +34,19 @@ export default function AdminHome() {
             href="/admin/addartist"
             linkLabel="Add Artist"
           />
+          <DashboardItem
+            title="Current Matches"
+            value={data.currentMatchCount}
+            href="/admin/matches"
+            linkLabel="View Matches"
+          />
+          <DashboardItem
+            title="Total Matches"
+            value={data.totalMatchCount}
+            href="/admin/create-matches"
+            linkLabel="Create Matches"
+          />
           <DashboardItem title="Total Votes" value={data.voteCount} />
-          <DashboardItem title="Total Matches" value={data.matchCount} />
           <DashboardItem
             title="Most Popular Song"
             size="small"

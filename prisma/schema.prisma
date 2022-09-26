@@ -73,6 +73,7 @@ model Song {
     nameHash   String  @unique
     album      String
     albumId    String
+    trackNum   Int     @default(1)
     albumArt   String?
     previewUrl String?
     popularity Int?
@@ -85,7 +86,8 @@ model Song {
 
 model Match {
     id         String   @id @unique @default(cuid())
-    date       DateTime
+    startDate  DateTime
+    endDate    DateTime
     isFeatured Boolean  @default(false)
 
     songs Song[]
