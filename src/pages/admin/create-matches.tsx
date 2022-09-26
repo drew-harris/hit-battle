@@ -15,6 +15,8 @@ export default function CreateMatchesPage() {
 
   const [uploadLoading, setUploadLoading] = useState(false);
 
+  const [groupSize, setGroupSize] = useState<string>("2");
+
   const createMatchesMutation = trpc.useMutation("admin.setup-matchups");
   const deleteMatchesMutation = trpc.useMutation("admin.delete-matches");
 
@@ -22,7 +24,7 @@ export default function CreateMatchesPage() {
     createMatchesMutation.mutate(
       {
         startDate: new Date(),
-        groupSize: 2,
+        groupSize: parseInt(groupSize),
         numMatchups: 10,
       },
       {
@@ -65,9 +67,18 @@ export default function CreateMatchesPage() {
     console.log(groups);
   };
 
+  const formClassName = "p-1 rounded bg-tan-100";
   return (
     <div>
       <h1 className="text-2xl font-bold">Create Matches</h1>
+      <div>
+        <div>Group Size</div>
+        <input
+          className={formClassName}
+          onChange={(e) => setGroupSize(e.target.value)}
+          value={groupSize}
+        ></input>
+      </div>
       <div className="my-4 flex gap-4">
         <Button
           onClick={createMatches}
