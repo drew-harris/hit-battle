@@ -235,4 +235,18 @@ export const adminRouter = createAdminRouter()
         mostPopularSong,
       };
     },
+  })
+
+  .query("all-users", {
+    resolve: async ({ ctx }) => {
+      try {
+        const users = await ctx.prisma.user.findMany({
+          orderBy: [{ name: "asc" }],
+        });
+        return users;
+      } catch (error: unknown) {
+        console.log(error);
+        throw new Error("Error getting all users");
+      }
+    },
   });

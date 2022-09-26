@@ -16,7 +16,12 @@ export default function AdminHome() {
       {status === "loading" && <div>Loading...</div>}
       {data && (
         <>
-          <DashboardItem title="Total Users" value={data.userCount} />
+          <DashboardItem
+            title="Total Users"
+            value={data.userCount}
+            href="/admin/users"
+            linkLabel="View Users"
+          />
           <DashboardItem
             title="Total Songs"
             value={data.songsCount}
