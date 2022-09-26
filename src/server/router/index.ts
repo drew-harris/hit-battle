@@ -5,12 +5,14 @@ import superjson from "superjson";
 import { exampleRouter } from "./example";
 import { protectedExampleRouter } from "./protected-example-router";
 import { adminRouter } from "./admin";
+import { songRouter } from "./songs";
 
 export const appRouter = createRouter()
   .transformer(superjson)
   .merge("example.", exampleRouter)
   .merge("auth.", protectedExampleRouter)
   .merge("admin.", adminRouter)
+  .merge("songs.", songRouter)
   .query("user-info", {
     resolve: ({ ctx }) => {
       console.log(ctx.session);

@@ -5,6 +5,7 @@ import { createAdminRouter } from "./context";
 import shuffleArray, * as Shuffle from "shuffle-array";
 import { Match, Prisma, Song } from "@prisma/client";
 import { MatchWithSong } from "../../types/match";
+import { Input } from "postcss";
 
 export const adminRouter = createAdminRouter()
   .query("artist-search", {
@@ -307,7 +308,9 @@ export const adminRouter = createAdminRouter()
         const songsCount = await ctx.prisma.song.count();
         const songs = await ctx.prisma.song.findMany({
           take: input.numMatchups * input.groupSize,
-          skip: Math.floor(Math.random() * (songsCount - input.numMatchups)),
+          skip: Math.floor(
+            Math.random() * (songsCount - input.numMatchups * input.groupSize)
+          ),
         });
         shuffleArray(songs);
 
@@ -379,6 +382,35 @@ export const adminRouter = createAdminRouter()
       } catch (error: unknown) {
         console.log(error);
         throw new Error("Error deleting matches");
+      }
+    },
+  })
+
+  .mutation("create-custom-match", {
+    input: z.object({
+      songs: z.array(z.any()) as ZodType<Song[]>,
+      startDate: z.date(),
+      endDate: z.date().nullable(),
+      title: z.string().nullable(),
+    }),
+    resolve: async ({ ctx, input }) => {
+      try {
+        const match = await ctx.prisma.match.create({
+          data: {
+            songs: {
+              connect: input.songs.map((song) => ({ id: song.id })),
+            },
+            startDate: input.startDate,
+            endDate:
+              input.endDate ||
+              new Date(input.startDate.getTime() + 24 * 60 * 60 * 1000),
+            title: input.title,
+            isCustom: true,
+          },
+        });
+        return match;
+      } catch (error) {
+        throw new Error("Error creating custom match");
       }
     },
   });

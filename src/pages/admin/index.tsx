@@ -57,6 +57,10 @@ export default function AdminHome() {
               data.mostPopularSong?.artist
             }
           />
+          <DashboardItem
+            linkLabel="Create Custom Match"
+            href="/admin/custom-match"
+          />
         </>
       )}
     </div>

@@ -2,11 +2,12 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+    provider        = "prisma-client-js"
+    previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
-    provider = "postgresql"
+    provider = "mysql"
     url      = env("DATABASE_URL")
 }
 
@@ -48,10 +49,15 @@ model User {
 
     isMod Boolean @default(false)
 
-    song          Song?
-    votes         Vote[]
-    recievedVotes Vote[]    @relation("recievedVotes")
-    comments      Comment[]
+    pointsBeforeReset Int @default(0)
+
+    song   Song?   @relation(fields: [songId], references: [id])
+    songId String?
+
+    votes    Vote[]
+    comments Comment[]
+
+    @@fulltext([name])
 }
 
 model VerificationToken {
@@ -63,10 +69,9 @@ model VerificationToken {
 }
 
 model Song {
-    id     String  @id @unique
-    title  String
-    user   User?   @relation(fields: [userId], references: [id])
-    userId String? @unique
+    id    String @id @unique @default(uuid())
+    title String
+    users User[]
 
     artist     String
     artistId   String
@@ -78,10 +83,16 @@ model Song {
     previewUrl String?
     popularity Int?
 
+    userLimit Int @default(1)
+
     stemifyLink String?
 
     Matches Match[]
     Votes   Vote[]
+
+    @@fulltext([title])
+    @@fulltext([artist])
+    @@fulltext([album])
 }
 
 model Match {
@@ -89,6 +100,9 @@ model Match {
     startDate  DateTime
     endDate    DateTime
     isFeatured Boolean  @default(false)
+
+    title    String?
+    isCustom Boolean @default(false)
 
     songs Song[]
     votes Vote[]
@@ -111,17 +125,14 @@ model Comment {
 model Vote {
     id String @id @unique @default(cuid())
 
-    Match   Match?  @relation(fields: [matchId], references: [id])
-    matchId String?
+    Match   Match  @relation(fields: [matchId], references: [id])
+    matchId String
 
     user   User   @relation(fields: [userId], references: [id])
     userId String
 
     for   Song   @relation(fields: [forId], references: [id])
     forId String
-
-    forUser   User   @relation(fields: [forUserId], references: [id], name: "recievedVotes")
-    forUserId String
 
     submittedAt DateTime @default(now())
 }
