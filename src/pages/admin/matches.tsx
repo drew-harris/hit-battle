@@ -1,3 +1,4 @@
+import { PulseLoader } from "react-spinners";
 import Button from "../../components/input/Button";
 import SimpleMatch from "../../components/matches/SimpleMatch";
 import { trpc } from "../../utils/trpc";
@@ -24,7 +25,13 @@ export default function Matches() {
         <Button onClick={nukeMatches}>Delete All</Button>
       </div>
       <div className="flex flex-col gap-4">
-        {status === "loading" && <div>Loading...</div>}
+        {status === "loading" && (
+          <div className="grid place-items-center">
+            <div>
+              <PulseLoader />
+            </div>
+          </div>
+        )}
         {status === "error" && <div>{error?.message}</div>}
         {matches &&
           matches.map((match) => (

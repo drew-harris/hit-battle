@@ -1,6 +1,7 @@
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
+import { PulseLoader } from "react-spinners";
 import DashboardItem from "../../components/admin/DashboardItem";
 import Button from "../../components/input/Button";
 import { trpc } from "../../utils/trpc";
@@ -13,7 +14,6 @@ export default function AdminHome() {
   };
   return (
     <div className="flex flex-wrap items-start justify-around gap-4 md:justify-start">
-      {status === "loading" && <div>Loading...</div>}
       {data && (
         <>
           <DashboardItem

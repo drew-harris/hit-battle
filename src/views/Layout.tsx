@@ -2,6 +2,7 @@ import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { SyncLoader } from "react-spinners";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -17,10 +18,11 @@ interface Route {
 export default function Layout({ children }: LayoutProps) {
   const session = useSession();
   const router = useRouter();
-  if (
-    (!session.data && !(session.status === "loading")) ||
-    router.pathname === "/accessdenied"
-  ) {
+
+  if (session.status === "loading") {
+    return <div className="grid h-[60vh] place-items-center"></div>;
+  }
+  if (!session.data || router.pathname === "/accessdenied") {
     return <>{children}</>;
   }
 
