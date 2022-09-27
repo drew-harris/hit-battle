@@ -15,9 +15,7 @@ const Home: NextPage = () => {
       <div className="grid h-[80vh] place-items-center text-center">
         <div>
           <div className="mb-8 text-xl text-tan-500">Logged In</div>
-          {session.data && JSON.stringify(session.data)}
-          {tsession && JSON.stringify(tsession.data)}
-          <Button onClick={() => signOut()} label="Sign Out" />
+          <Button onClick={() => signOut()}>Sign Out</Button>
         </div>
       </div>
     );

@@ -7,7 +7,8 @@ export default function Account() {
       onClick={() => {
         signOut({ callbackUrl: "/" });
       }}
-      label="SIGN OUT"
-    ></Button>
+    >
+      Sign Out
+    </Button>
   );
 }

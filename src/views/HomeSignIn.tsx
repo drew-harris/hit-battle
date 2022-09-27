@@ -15,10 +15,7 @@ const HomeSignIn: NextPage = () => {
             <a href="https://www.stemify2.net">Stemify</a>
           </span>
         </h3>
-        <Button
-          onClick={() => signIn("discord")}
-          label="Sign In With Discord"
-        />
+        <Button onClick={() => signIn("discord")}>Sign In With Discord</Button>
       </div>
     </div>
   );
