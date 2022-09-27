@@ -10,4 +10,9 @@ declare module "next-auth" {
       isMod: boolean;
     } & DefaultSession["user"];
   }
+
+  interface JWT {
+    id: string;
+    isMod: boolean;
+  }
 }

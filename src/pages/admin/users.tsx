@@ -27,12 +27,12 @@ export default function UsersPage() {
       {data &&
         data.map((user) => (
           <div
-            className="flex max-w-lg items-center justify-between rounded-md bg-tan-100 p-2"
+            className="flex max-w-lg items-center justify-between overflow-hidden truncate rounded-md bg-tan-100 p-2"
             key={user.id}
           >
-            <div className="flex items-center gap-3">
-              <div>{user.name}</div>
-              {user.isMod && <div className="text-sm font-bold">Mod</div>}
+            <div className="flex items-center gap-3 truncate">
+              <div className="truncate">{user.name}</div>
+              {user.isMod && <div className="mr-2 text-sm font-bold">Mod</div>}
             </div>
             <Button onClick={() => banUser(user.id)}>BAN</Button>
           </div>

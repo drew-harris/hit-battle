@@ -1,6 +1,5 @@
 import Button from "../../components/input/Button";
 import { trpc } from "../../utils/trpc";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 import SimpleSong from "../../components/songs/SimpleSongs";
 import { useEffect, useState } from "react";
 import Pagination from "../../components/input/Pagination";
@@ -8,7 +7,6 @@ import Pagination from "../../components/input/Pagination";
 export default function SongsPage() {
   const [page, setPage] = useState(1);
   const client = trpc.useContext();
-  const [query, setQuery] = useState("");
   const { data, error, refetch, status } = trpc.useQuery([
     "admin.all-songs",
     { page },
@@ -33,7 +31,7 @@ export default function SongsPage() {
 
   const deleteSong = (id: string) => {
     client.setQueryData(
-      ["admin.all-songs"],
+      ["admin.all-songs", { page: page }],
       (data) => data?.filter((song) => song.id !== id) || []
     );
     deleteMutation.mutate(id, {

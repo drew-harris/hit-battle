@@ -2,7 +2,9 @@ import { Song } from "@prisma/client";
 import { useState } from "react";
 import { DebounceInput } from "react-debounce-input";
 import Button from "../../components/input/Button";
+import Input from "../../components/input/Input";
 import SimpleSong from "../../components/songs/SimpleSongs";
+import { thisMorning } from "../../server/utils/dates";
 import { trpc } from "../../utils/trpc";
 
 export default function CustomMatch() {
@@ -15,7 +17,7 @@ export default function CustomMatch() {
   const submitMatchMutation = trpc.useMutation("admin.create-custom-match");
   const inputClassName = "p-2 rounded-md bg-tan-200 ";
   const [matchTitle, setMatchTitle] = useState("");
-  const [startDate, setStartDate] = useState(new Date().toISOString());
+  const [startDate, setStartDate] = useState(thisMorning().toISOString());
   const [endDate, setEndDate] = useState("");
 
   const submitMatch = () => {
@@ -42,19 +44,18 @@ export default function CustomMatch() {
     <div>
       <h1 className="text-2xl font-bold">Custom Match</h1>
       <div className="rounded-xl bg-tan-100 p-4">
-        <h1>Search</h1>
         <div className="">
           <DebounceInput
-            className={inputClassName}
+            element={Input}
             debounceTimeout={300}
             value={queryString}
             onChange={(e) => setQueryString(e.target.value)}
             placeholder="Search for a song"
           />
-          <div className="flex flex-wrap gap-4 pt-4">
+          <div className="flex flex-wrap gap-x-4">
             {searchResults?.map((song) => (
               <SimpleSong
-                className="max-w-md bg-tan-200 shadow"
+                className="mt-4 max-w-md bg-tan-200 shadow"
                 song={song}
                 key={song.id}
               >
@@ -95,31 +96,25 @@ export default function CustomMatch() {
       <div className="my-4 rounded-xl bg-tan-100 p-4">
         <div className="mb-4">Match Settings</div>
         <div className="flex gap-4">
-          <div>
-            <div>Title</div>
-            <input
-              value={matchTitle}
-              onChange={(e) => setMatchTitle(e.target.value)}
-              className={inputClassName}
-            />
-          </div>
-          <div>
-            <div>Start Date (UTC)</div>
-            <input
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              className={inputClassName}
-            />
-          </div>
-          <div>
-            <div>End Date</div>
-            <input
-              placeholder="Leave blank for 24 hours after"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              className={inputClassName}
-            />
-          </div>
+          <Input
+            label="Match Title"
+            value={matchTitle}
+            onChange={(e) => setMatchTitle(e.target.value)}
+            className={inputClassName}
+          />
+          <Input
+            label="Start Date (UTC)"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className={inputClassName}
+          />
+          <Input
+            label="End Date (UTC)"
+            placeholder="Leave blank for 24 hours after"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className={inputClassName}
+          />
         </div>
       </div>
       {songs.length > 1 && <Button onClick={submitMatch}>Create Match</Button>}

@@ -20,18 +20,19 @@ export default function SimpleSong({
         className
       }
     >
-      <div className="flex items-center truncate">
+      <div className="flex items-center overflow-hidden">
         {song.albumArt && (
-          <Image
-            alt={song.title}
-            src={song.albumArt}
-            placeholder="blur"
-            loading="lazy"
-            blurDataURL={song.loaderAlbumArt || ""}
-            height={48}
-            width={48}
-            className="h-10 w-10 rounded-md"
-          />
+          <div className="relative h-10 w-10 shrink-0 grow">
+            <Image
+              alt={song.title}
+              src={song.albumArt}
+              loading="lazy"
+              placeholder="blur"
+              blurDataURL={song.loaderAlbumArt || " "}
+              layout="fill"
+              className="rounded-md"
+            />
+          </div>
         )}
         <div className="ml-2 truncate">
           <p className="truncate font-bold">{song.title}</p>

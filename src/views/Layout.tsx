@@ -16,7 +16,11 @@ interface Route {
 
 export default function Layout({ children }: LayoutProps) {
   const session = useSession();
-  if (!session.data && !(session.status === "loading")) {
+  const router = useRouter();
+  if (
+    (!session.data && !(session.status === "loading")) ||
+    router.pathname === "/accessdenied"
+  ) {
     return <>{children}</>;
   }
 

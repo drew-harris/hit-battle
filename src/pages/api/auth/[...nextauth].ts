@@ -9,13 +9,23 @@ import { env } from "../../../env/server.mjs";
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
   callbacks: {
-    session({ session, user }) {
+    session({ session, token }) {
       if (session.user) {
-        session.user.id = user.id;
-        session.user.isMod = user.isMod as boolean;
+        session.user.id = token.id as string;
+        session.user.isMod = token.isMod as boolean;
       }
       return session;
     },
+    jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.isMod = user.isMod as boolean;
+      }
+      return token;
+    },
+  },
+  session: {
+    strategy: "jwt",
   },
   // Configure one or more authentication providers
   adapter: PrismaAdapter(prisma),
