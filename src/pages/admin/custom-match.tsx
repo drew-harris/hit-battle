@@ -63,8 +63,9 @@ export default function CustomMatch() {
                     setSongs((prev) => [...prev, song]);
                   }}
                   disabled={songs.some((s) => s.id === song.id)}
-                  label="Add"
-                />
+                >
+                  Add
+                </Button>
               </SimpleSong>
             ))}
           </div>
@@ -84,8 +85,9 @@ export default function CustomMatch() {
                 onClick={() => {
                   setSongs((prev) => prev.filter((s) => s.id !== song.id));
                 }}
-                label="Remove"
-              />
+              >
+                Remove
+              </Button>
             </SimpleSong>
           ))}
         </div>
@@ -120,9 +122,7 @@ export default function CustomMatch() {
           </div>
         </div>
       </div>
-      {songs.length > 1 && (
-        <Button onClick={submitMatch} label="Create Match" />
-      )}
+      {songs.length > 1 && <Button onClick={submitMatch}>Create Match</Button>}
     </div>
   );
 }

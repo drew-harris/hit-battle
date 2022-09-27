@@ -95,16 +95,15 @@ export default function CreateMatchesPage() {
         <Button
           onClick={createMatches}
           disabled={createMatchesMutation.isLoading}
-          label="Generate Matches"
-        />
+        >
+          Generate matches
+        </Button>
         {matchDocs.length > 0 && (
           <>
-            <Button onClick={() => setMatchDocs([])} label="Clear Matches" />
-            <Button
-              onClick={submitMatches}
-              disabled={uploadLoading}
-              label="Submit Matches"
-            />
+            <Button onClick={() => setMatchDocs([])}>Clear Matches</Button>
+            <Button onClick={submitMatches} disabled={uploadLoading}>
+              Submit Matches
+            </Button>
           </>
         )}
       </div>

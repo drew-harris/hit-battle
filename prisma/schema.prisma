@@ -73,15 +73,16 @@ model Song {
     title String
     users User[]
 
-    artist     String
-    artistId   String
-    nameHash   String  @unique
-    album      String
-    albumId    String
-    trackNum   Int     @default(1)
-    albumArt   String?
-    previewUrl String?
-    popularity Int?
+    artist         String
+    artistId       String
+    nameHash       String  @unique
+    album          String
+    albumId        String
+    trackNum       Int     @default(1)
+    albumArt       String?
+    loaderAlbumArt String?
+    previewUrl     String?
+    popularity     Int?
 
     userLimit Int @default(1)
 

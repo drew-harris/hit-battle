@@ -1,4 +1,5 @@
 import { MatchWithSong } from "../../types/match";
+import Image from "next/image";
 
 export default function SimpleMatch({
   match,
@@ -19,7 +20,9 @@ export default function SimpleMatch({
       }
     >
       {showDate && (
-        <div className="text-center">{match.startDate.toLocaleString()}</div>
+        <div className="mb-2 text-center">
+          {match.startDate.toLocaleString()}
+        </div>
       )}
       {match.title && (
         <div className="text-center text-2xl font-bold">{match.title}</div>
@@ -33,7 +36,12 @@ export default function SimpleMatch({
             className="flex items-center gap-2  rounded-md bg-tan-200 p-2 "
           >
             {song.albumArt && (
-              <img src={song.albumArt} className="h-12 w-12 rounded-lg"></img>
+              <Image
+                width={48}
+                height={48}
+                src={song.albumArt}
+                className="rounded-lg"
+              ></Image>
             )}
             <div className="flex-shrink truncate">
               <div className=" truncate font-bold">{song.title}</div>

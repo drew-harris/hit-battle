@@ -1,4 +1,5 @@
 import { Song } from "@prisma/client";
+import Image from "next/image";
 
 interface SimpleSongProps {
   song: Song;
@@ -21,9 +22,14 @@ export default function SimpleSong({
     >
       <div className="flex items-center truncate">
         {song.albumArt && (
-          <img
+          <Image
             alt={song.title}
             src={song.albumArt}
+            placeholder="blur"
+            loading="lazy"
+            blurDataURL={song.loaderAlbumArt || ""}
+            height={48}
+            width={48}
             className="h-10 w-10 rounded-md"
           />
         )}

@@ -149,6 +149,7 @@ export const adminRouter = createAdminRouter()
                 album: album.name,
                 artist: track?.artists[0]?.name || input.name,
                 albumArt: album?.images[0]?.url,
+                loaderAlbumArt: album?.images[album.images.length - 1]?.url,
                 albumId: album.id,
                 artistId: input.id,
                 title: track.name,
@@ -189,12 +190,16 @@ export const adminRouter = createAdminRouter()
   })
 
   .query("all-songs", {
-    resolve: async ({ ctx }) => {
+    input: z.object({
+      page: z.number().optional().default(1),
+    }),
+    resolve: async ({ ctx, input }) => {
       try {
         const songs = await ctx.prisma.song.findMany({
           orderBy: [{ artist: "asc" }, { album: "asc" }, { trackNum: "asc" }],
+          take: 24,
+          skip: (input.page - 1) * 24,
         });
-        console.log(songs);
         return songs;
       } catch (error: unknown) {
         console.log(error);

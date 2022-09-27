@@ -60,8 +60,9 @@ export default function AddArtistPage() {
             onClick={() => onAdd(artist.id, artist.name)}
             className="justify-self-end"
             disabled={addArtistMutation.status === "loading"}
-            label="Add"
-          ></Button>
+          >
+            Add
+          </Button>
         )}
       </div>
     );

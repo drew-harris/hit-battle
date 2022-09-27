@@ -21,7 +21,7 @@ export default function Matches() {
     <div>
       <div className="align-center mb-3 flex justify-between">
         <div className="mb-3 text-2xl font-bold">Matches</div>
-        <Button onClick={nukeMatches} label="DELETE ALL" />
+        <Button onClick={nukeMatches}>Delete All</Button>
       </div>
       <div className="flex flex-col gap-4">
         {status === "loading" && <div>Loading...</div>}

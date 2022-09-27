@@ -30,9 +30,11 @@ export default function UsersPage() {
             className="flex max-w-lg items-center justify-between rounded-md bg-tan-100 p-2"
             key={user.id}
           >
-            <div>{user.name}</div>
-            {user.isMod && <div className="text-sm font-bold">Mod</div>}
-            <Button label="BAN" onClick={() => banUser(user.id)} />
+            <div className="flex items-center gap-3">
+              <div>{user.name}</div>
+              {user.isMod && <div className="text-sm font-bold">Mod</div>}
+            </div>
+            <Button onClick={() => banUser(user.id)}>BAN</Button>
           </div>
         ))}
     </div>

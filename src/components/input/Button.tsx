@@ -1,14 +1,14 @@
 interface ButtonProps {
-  label: string;
   onClick?: (arg0: any) => void;
   className?: string;
   disabled?: boolean;
+  children?: React.ReactNode;
 }
 export default function Button({
-  label,
   onClick,
   className,
   disabled,
+  children,
 }: ButtonProps) {
   return (
     <button
@@ -20,7 +20,7 @@ export default function Button({
         (disabled ? " cursor-not-allowed opacity-50" : "")
       }
     >
-      {label}
+      {children}
     </button>
   );
 }
