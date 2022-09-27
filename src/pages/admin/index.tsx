@@ -1,9 +1,4 @@
-import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Link from "next/link";
-import { PulseLoader } from "react-spinners";
 import DashboardItem from "../../components/admin/DashboardItem";
-import Button from "../../components/input/Button";
 import { trpc } from "../../utils/trpc";
 
 export default function AdminHome() {
@@ -46,6 +41,16 @@ export default function AdminHome() {
             href="/admin/create-matches"
             linkLabel="Create Matches"
           />
+          <DashboardItem
+            linkLabel="Create Custom Match"
+            href="/admin/custom-match"
+            title="Custom Matches"
+            value={data.customMatchCount}
+          />
+          <DashboardItem
+            title="Songs With Previews"
+            value={data.previewUrlCount}
+          />
           <DashboardItem title="Total Votes" value={data.voteCount} />
           <DashboardItem
             title="Most Popular Song"
@@ -56,10 +61,6 @@ export default function AdminHome() {
               " - " +
               data.mostPopularSong?.artist
             }
-          />
-          <DashboardItem
-            linkLabel="Create Custom Match"
-            href="/admin/custom-match"
           />
         </>
       )}

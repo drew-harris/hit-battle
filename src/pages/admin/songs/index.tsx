@@ -1,11 +1,13 @@
-import Button from "../../components/input/Button";
-import { trpc } from "../../utils/trpc";
-import SimpleSong from "../../components/songs/SimpleSongs";
+import Button from "../../../components/input/Button";
+import { trpc } from "../../../utils/trpc";
+import SimpleSong from "../../../components/songs/SimpleSongs";
 import { useEffect, useState } from "react";
-import Pagination from "../../components/input/Pagination";
+import Pagination from "../../../components/input/Pagination";
+import { useRouter } from "next/router";
 
 export default function SongsPage() {
   const [page, setPage] = useState(1);
+  const router = useRouter();
   const client = trpc.useContext();
   const { data, error, refetch, status } = trpc.useQuery([
     "admin.all-songs",
@@ -60,7 +62,11 @@ export default function SongsPage() {
       <div className="grid grid-flow-row grid-cols-1 gap-1 text-ellipsis break-words md:grid-cols-2 xl:grid-cols-3">
         {data &&
           data.map((song) => (
-            <SimpleSong song={song} key={song.id}>
+            <SimpleSong
+              onClickTitle={() => router.push("/admin/songs/" + song.id)}
+              song={song}
+              key={song.id}
+            >
               <Button onClick={() => deleteSong(song.id)}>Delete</Button>
             </SimpleSong>
           ))}

@@ -1,5 +1,6 @@
+import { useRouter } from "next/router";
 import { MatchWithSong } from "../../types/match";
-import Image from "next/image";
+import SimpleSong from "../songs/SimpleSongs";
 
 export default function SimpleMatch({
   match,
@@ -12,6 +13,7 @@ export default function SimpleMatch({
   className?: string;
   chidren?: React.ReactNode;
 }) {
+  const router = useRouter();
   return (
     <div
       className={
@@ -31,23 +33,12 @@ export default function SimpleMatch({
         className={`flex flex-col md:grid grid-cols-${match.songs.length} gap-2`}
       >
         {match.songs.map((song) => (
-          <div
+          <SimpleSong
+            onClickTitle={() => router.push("/admin/songs/" + song.id)}
+            song={song}
             key={song.id}
-            className="flex items-center gap-2  rounded-md bg-tan-200 p-2 "
-          >
-            {song.albumArt && (
-              <Image
-                width={48}
-                height={48}
-                src={song.albumArt}
-                className="rounded-lg"
-              ></Image>
-            )}
-            <div className="flex-shrink truncate">
-              <div className=" truncate font-bold">{song.title}</div>
-              <div>{song.artist}</div>
-            </div>
-          </div>
+            className="bg-tan-200"
+          />
         ))}
       </div>
       {chidren && <div className="flex items-center">{chidren}</div>}

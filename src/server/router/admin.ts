@@ -145,6 +145,7 @@ export const adminRouter = createAdminRouter()
                 track.artists[0]?.name === input.name
             )
             .map((track) => {
+              console.log("PREVIEW URL: ", track.preview_url);
               return {
                 album: album.name,
                 artist: track?.artists[0]?.name || input.name,
@@ -231,7 +232,21 @@ export const adminRouter = createAdminRouter()
       const totalMatchCountPromise = ctx.prisma.match.count();
 
       const mostPopularSongPromise = ctx.prisma.song.findFirst({
-        orderBy: [{ Votes: { _count: "asc" } }],
+        orderBy: [{ votes: { _count: "asc" } }],
+      });
+
+      const previewUrlCountPromise = ctx.prisma.song.count({
+        where: {
+          previewUrl: {
+            not: null,
+          },
+        },
+      });
+
+      const customMatchCountPromise = ctx.prisma.match.count({
+        where: {
+          isCustom: true,
+        },
       });
 
       const [
@@ -242,6 +257,8 @@ export const adminRouter = createAdminRouter()
         currentMatchCount,
         totalMatchCount,
         mostPopularSong,
+        previewUrlCount,
+        customMatchCount,
       ] = await Promise.all([
         songsCountPromise,
         artistsCountPromise,
@@ -250,6 +267,8 @@ export const adminRouter = createAdminRouter()
         currentMatchCountPromise,
         totalMatchCountPromise,
         mostPopularSongPromise,
+        previewUrlCountPromise,
+        customMatchCountPromise,
       ]);
       return {
         songsCount,
@@ -259,6 +278,8 @@ export const adminRouter = createAdminRouter()
         currentMatchCount,
         totalMatchCount,
         mostPopularSong,
+        previewUrlCount,
+        customMatchCount,
       };
     },
   })

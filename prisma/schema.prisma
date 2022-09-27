@@ -88,8 +88,8 @@ model Song {
 
     stemifyLink String?
 
-    Matches Match[]
-    Votes   Vote[]
+    matches Match[]
+    votes   Vote[]
 
     @@fulltext([title])
     @@fulltext([artist])
