@@ -1,11 +1,9 @@
 import type { NextPage } from "next";
 import { signOut, useSession } from "next-auth/react";
 import Button from "../components/input/Button";
-import { trpc } from "../utils/trpc";
 import HomeSignIn from "../views/HomeSignIn";
 
 const Home: NextPage = () => {
-  const tsession = trpc.useQuery(["user-info"]);
   const session = useSession();
   if (session.status === "loading") {
     return <div></div>;

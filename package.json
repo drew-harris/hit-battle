@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "pretty": "yarn prettier 'src/**/*.ts' --write",
+    "pretty-check": "yarn prettier 'src/**/*.ts' --check"
   },
   "dependencies": {
     "@formkit/auto-animate": "^1.0.0-beta.3",

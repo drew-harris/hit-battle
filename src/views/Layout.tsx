@@ -2,7 +2,6 @@ import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { SyncLoader } from "react-spinners";
 
 interface LayoutProps {
   children: React.ReactNode;

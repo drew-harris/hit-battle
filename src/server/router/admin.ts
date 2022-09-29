@@ -1,11 +1,10 @@
-import { z, ZodType } from "zod";
+import { Prisma, Song } from "@prisma/client";
+import shuffleArray from "shuffle-array";
 import { v4 as uuidv4 } from "uuid";
+import { z, ZodType } from "zod";
+import { MatchWithSong } from "../../types/match";
 import { getNewToken } from "../utils/spotify";
 import { createAdminRouter } from "./context";
-import shuffleArray, * as Shuffle from "shuffle-array";
-import { Match, Prisma, Song } from "@prisma/client";
-import { MatchWithSong } from "../../types/match";
-import { Input } from "postcss";
 
 export const adminRouter = createAdminRouter()
   .query("artist-search", {

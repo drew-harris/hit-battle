@@ -2,11 +2,7 @@ import DashboardItem from "../../components/admin/DashboardItem";
 import { trpc } from "../../utils/trpc";
 
 export default function AdminHome() {
-  const { data, status } = trpc.useQuery(["admin.dashboard-info"]);
-  const nukeMutation = trpc.useMutation(["admin.nuke-all-songs"]);
-  const nuke = () => {
-    nukeMutation.mutate();
-  };
+  const { data } = trpc.useQuery(["admin.dashboard-info"]);
   return (
     <div className="flex flex-wrap items-start justify-around gap-4 md:justify-start">
       {data && (

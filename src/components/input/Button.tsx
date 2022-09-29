@@ -1,5 +1,5 @@
 interface ButtonProps {
-  onClick?: (arg0: any) => void;
+  onClick?: (...args: unknown[]) => void;
   className?: string;
   disabled?: boolean;
   children?: React.ReactNode;

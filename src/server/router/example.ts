@@ -15,7 +15,7 @@ export const exampleRouter = createRouter()
     },
   })
   .query("getAll", {
-    async resolve({ ctx }) {
+    async resolve() {
       return "hi";
     },
   });

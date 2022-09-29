@@ -10,12 +10,13 @@ export default function SimpleMatch({
 }: {
   match: MatchWithSong;
   showDate?: boolean;
-  className?: string;
+  className?:       string;
   chidren?: React.ReactNode;
 }) {
   const router = useRouter();
   return (
-    <div
+
+        <div
       className={
         "flex  flex-col rounded-md border border-white bg-tan-100 p-2 shadow-md " +
         className
