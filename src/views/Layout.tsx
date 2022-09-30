@@ -1,7 +1,6 @@
 import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Session } from "next-auth";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import useQuickSession from "../hooks/quickLocalSession";
 
@@ -19,9 +18,8 @@ interface Route {
 
 export default function Layout({ children, initialSession }: LayoutProps) {
   const session = useQuickSession(initialSession);
-  const router = useRouter();
 
-  if (!session || router.pathname === "/accessdenied") {
+  if (!session) {
     return <>{children}</>;
   }
 

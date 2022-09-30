@@ -4,6 +4,8 @@ import Button from "../../components/input/Button";
 import { trpc } from "../../utils/trpc";
 import Image from "next/image";
 import Input from "../../components/input/Input";
+import { PulseLoader } from "react-spinners";
+import loaderColors from "../../utils/colors";
 
 export default function AddArtistPage() {
   const [formInput, setFormInput] = useState("");
@@ -66,13 +68,15 @@ export default function AddArtistPage() {
             </div>
           </div>
         </div>
-        {artistIds?.includes(artist.id) ? (
-          <div>Added</div>
+        {addArtistMutation.isLoading && artistIds?.includes(artist.id) ? (
+          <PulseLoader color={loaderColors.main} size={8}></PulseLoader>
         ) : (
           <Button
             onClick={() => onAdd(artist.id, artist.name)}
+            disabled={
+              addArtistMutation.isLoading || artistIds?.includes(artist.id)
+            }
             className="justify-self-end"
-            disabled={addArtistMutation.status === "loading"}
           >
             Add
           </Button>

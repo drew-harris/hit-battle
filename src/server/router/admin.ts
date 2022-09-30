@@ -118,7 +118,8 @@ export const adminRouter = createAdminRouter()
           }
           console.log("Album: ", album.id);
           const albumResponse = await fetch(
-            `https://api.spotify.com/v1/albums/${album.id}/tracks?`,
+            `https://api.spotify.com/v1/albums/${album.id}/tracks?` +
+              new URLSearchParams({ market: "US" }),
             {
               headers: {
                 Authorization: `Bearer ${token.token}`,
@@ -192,9 +193,20 @@ export const adminRouter = createAdminRouter()
   .query("all-songs", {
     input: z.object({
       page: z.number().optional().default(1),
+      query: z.string().optional(),
     }),
     resolve: async ({ ctx, input }) => {
       try {
+        if (input.query) {
+          const songs = await ctx.prisma.song.findMany({
+            where: {
+              title: {
+                search: input.query,
+              },
+            },
+          });
+          return songs;
+        }
         const songs = await ctx.prisma.song.findMany({
           orderBy: [{ artist: "asc" }, { album: "asc" }, { trackNum: "asc" }],
           take: 24,

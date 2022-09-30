@@ -4,18 +4,21 @@ import SimpleSong from "../../../components/songs/SimpleSongs";
 import { useEffect, useState } from "react";
 import Pagination from "../../../components/input/Pagination";
 import { useRouter } from "next/router";
+import Input from "../../../components/input/Input";
+import { DebounceInput } from "react-debounce-input";
 
 export default function SongsPage() {
   const [page, setPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
   const client = trpc.useContext();
   const { data, error, refetch, status } = trpc.useQuery([
     "admin.all-songs",
-    { page },
+    { page, query: searchQuery },
   ]);
 
   useEffect(() => {
-    client.prefetchQuery(["admin.all-songs", { page: page + 1 }]);
+    client.prefetchQuery(["admin.all-songs", { page: page + 1, query: "" }]);
   }, [page, client]);
 
   const nukeMutation = trpc.useMutation(["admin.nuke-all-songs"]);
@@ -45,8 +48,19 @@ export default function SongsPage() {
 
   return (
     <div>
-      <div className="flex justify-between">
-        <h1 className="text-2xl text-tan-500">All Songs</h1>
+      <div className="mb-4 flex justify-between">
+        <div className="items flex items-end gap-8">
+          <h1 className="text-3xl font-bold text-tan-500">All Songs</h1>
+          <DebounceInput
+            debounceTimeout={400}
+            element={Input}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            value={searchQuery}
+            bg="tan-100"
+            className="p-0 px-1"
+            label="Search Songs"
+          />
+        </div>
         <Button
           className="mb-3"
           onClick={nuke}
@@ -71,7 +85,10 @@ export default function SongsPage() {
             </SimpleSong>
           ))}
       </div>
-      <Pagination page={page} setPage={setPage} limit={100} />
+      {data?.length === 0 && <div className="text-center">No songs found</div>}
+      {!searchQuery && (
+        <Pagination hidePageLabel page={page} setPage={setPage} limit={100} />
+      )}
     </div>
   );
 }

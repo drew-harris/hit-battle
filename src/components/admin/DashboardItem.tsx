@@ -1,9 +1,6 @@
 import Link from "next/link";
 import { PulseLoader } from "react-spinners";
 
-import resolveConfig from "tailwindcss/resolveConfig";
-import tailwindConfig from "../../../tailwind.config.cjs";
-
 interface DashboardItemProps {
   title?: string;
   value?: string | number;
