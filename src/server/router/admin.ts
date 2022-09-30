@@ -18,6 +18,7 @@ export const adminRouter = createAdminRouter()
         let token = await ctx.prisma.spotifyCreds.findFirst({});
         if (!token || token.expires < new Date()) {
           const newToken = await getNewToken(token?.refreshToken || "failure");
+          console.log("new token: ", newToken);
           token = await ctx.prisma.spotifyCreds.upsert({
             where: {
               id: "doc",
