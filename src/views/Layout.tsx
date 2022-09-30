@@ -1,10 +1,13 @@
 import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Session } from "next-auth";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import useQuickSession from "../hooks/quickLocalSession";
 
 interface LayoutProps {
   children: React.ReactNode;
+  initialSession: Session | null | undefined;
 }
 
 interface Route {
@@ -14,14 +17,11 @@ interface Route {
   authOnly?: boolean;
 }
 
-export default function Layout({ children }: LayoutProps) {
-  const session = useSession();
+export default function Layout({ children, initialSession }: LayoutProps) {
+  const session = useQuickSession(initialSession);
   const router = useRouter();
 
-  if (session.status === "loading") {
-    return <div className="grid h-[60vh] place-items-center"></div>;
-  }
-  if (!session.data || router.pathname === "/accessdenied") {
+  if (!session || router.pathname === "/accessdenied") {
     return <>{children}</>;
   }
 
@@ -58,7 +58,7 @@ export default function Layout({ children }: LayoutProps) {
       </header>
       <nav className="flex gap-2 overflow-x-scroll p-4 ">
         {routes.map((route) => {
-          if (route.modOnly && !session?.data?.user?.isMod) {
+          if (route.modOnly && !session?.user?.isMod) {
             return null;
           }
           return <RouteButton route={route} key={route.path}></RouteButton>;
@@ -79,6 +79,7 @@ const RouteButton = ({ route }: { route: Route }) => {
 
   const inactiveClass =
     "p-1 px-2 font-semibold text-tan-400 transition-transform rounded-lg sm:block ";
+
   const className = active ? activeClass : inactiveClass;
   return (
     <button

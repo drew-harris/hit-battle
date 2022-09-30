@@ -13,10 +13,9 @@ export const appRouter = createRouter()
   .merge("auth.", protectedExampleRouter)
   .merge("admin.", adminRouter)
   .merge("songs.", songRouter)
-  .query("user-info", {
+  .query("my-session", {
     resolve: ({ ctx }) => {
-      console.log(ctx.session);
-      return ctx.session?.user;
+      return ctx.session;
     },
   });
 

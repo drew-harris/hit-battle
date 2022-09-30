@@ -10,27 +10,26 @@ import type { Session } from "next-auth";
 import "../styles/globals.css";
 import Head from "next/head";
 import Layout from "../views/Layout";
+import { getBaseUrl, trpc } from "../utils/trpc";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
-  pageProps: { session, ...pageProps },
+  pageProps: { ...pageProps },
 }) => {
+  const { data: session, status } = trpc.useQuery(["my-session"], {
+    ssr: true,
+  });
+
   return (
     <SessionProvider session={session}>
       <Head>
         <title>Stemplayer Hit Battle</title>
       </Head>
-      <Layout>
+      <Layout initialSession={session}>
         <Component {...pageProps} />
       </Layout>
     </SessionProvider>
   );
-};
-
-export const getBaseUrl = () => {
-  if (typeof window !== "undefined") return ""; // browser should use relative url
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
-  return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
 };
 
 export default withTRPC<AppRouter>({

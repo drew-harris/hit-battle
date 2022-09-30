@@ -2,7 +2,7 @@ import DashboardItem from "../../components/admin/DashboardItem";
 import { trpc } from "../../utils/trpc";
 
 export default function AdminHome() {
-  const { data } = trpc.useQuery(["admin.dashboard-info"]);
+  const { data } = trpc.useQuery(["admin.dashboard-info"], { ssr: true });
   return (
     <div className="flex flex-wrap items-start justify-around gap-4 md:justify-start">
       <DashboardItem

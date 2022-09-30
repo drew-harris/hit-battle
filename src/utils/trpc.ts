@@ -3,9 +3,14 @@ import type { AppRouter } from "../server/router";
 import { createReactQueryHooks, createTRPCClient } from "@trpc/react";
 import type { inferProcedureOutput, inferProcedureInput } from "@trpc/server";
 import superjson from "superjson";
-import { getBaseUrl } from "../pages/_app";
 
 export const trpc = createReactQueryHooks<AppRouter>();
+
+export const getBaseUrl = () => {
+  if (typeof window !== "undefined") return ""; // browser should use relative url
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
+  return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
+};
 
 export const vanilla = createTRPCClient<AppRouter>({
   url: `${getBaseUrl()}/api/trpc`,
