@@ -17,7 +17,7 @@ export const adminRouter = createAdminRouter()
         console.log("\n searching for artist: ", input);
         let token = await ctx.prisma.spotifyCreds.findFirst({});
         if (!token || token.expires < new Date()) {
-          const newToken = await getNewToken();
+          const newToken = await getNewToken(token?.refreshToken || "failure");
           token = await ctx.prisma.spotifyCreds.upsert({
             where: {
               id: "doc",
@@ -70,7 +70,7 @@ export const adminRouter = createAdminRouter()
       try {
         let token = await ctx.prisma.spotifyCreds.findFirst({});
         if (!token || token.expires < new Date()) {
-          const newToken = await getNewToken();
+          const newToken = await getNewToken(token?.refreshToken || "failure");
           token = await ctx.prisma.spotifyCreds.upsert({
             where: {
               id: "doc",
@@ -243,7 +243,7 @@ export const adminRouter = createAdminRouter()
       const totalMatchCountPromise = ctx.prisma.match.count();
 
       const mostPopularSongPromise = ctx.prisma.song.findFirst({
-        orderBy: [{ votes: { _count: "asc" } }],
+        orderBy: [{ forVotes: { _count: "asc" } }],
       });
 
       const previewUrlCountPromise = ctx.prisma.song.count({

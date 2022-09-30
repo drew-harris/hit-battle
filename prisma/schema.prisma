@@ -88,8 +88,9 @@ model Song {
 
     stemifyLink String?
 
-    matches Match[]
-    votes   Vote[]
+    matches      Match[]
+    forVotes     Vote[]  @relation("forVotes")
+    againstVotes Vote[]  @relation("againstVotes")
 
     @@fulltext([title])
     @@fulltext([artist])
@@ -132,14 +133,18 @@ model Vote {
     user   User   @relation(fields: [userId], references: [id])
     userId String
 
-    for   Song   @relation(fields: [forId], references: [id])
+    for   Song   @relation(name: "forVotes", fields: [forId], references: [id])
     forId String
+
+    against   Song   @relation(name: "againstVotes", fields: [againstId], references: [id])
+    againstId String
 
     submittedAt DateTime @default(now())
 }
 
 model SpotifyCreds {
-    id      String   @id @default(cuid())
-    token   String
-    expires DateTime
+    id           String   @id @default(cuid())
+    token        String
+    refreshToken String   @default("123")
+    expires      DateTime
 }

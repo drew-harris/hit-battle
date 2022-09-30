@@ -52,7 +52,8 @@ export const songRouter = createProtectedRouter()
               },
             },
             users: true,
-            votes: true,
+            forVotes: true,
+            againstVotes: true,
           },
         });
 
