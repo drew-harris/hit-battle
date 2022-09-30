@@ -144,7 +144,7 @@ model Vote {
 
 model SpotifyCreds {
     id           String   @id @default(cuid())
-    token        String
-    refreshToken String   @default("123")
+    token        String   @db.VarChar(1000)
+    refreshToken String   @default("123") @db.VarChar(1000)
     expires      DateTime
 }
