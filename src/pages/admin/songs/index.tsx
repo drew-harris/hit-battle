@@ -1,6 +1,6 @@
 import Button from "../../../components/input/Button";
 import { trpc } from "../../../utils/trpc";
-import SimpleSong from "../../../components/songs/SimpleSongs";
+import SimpleSong from "../../../components/admin/SimpleSong";
 import { useEffect, useState } from "react";
 import Pagination from "../../../components/input/Pagination";
 import { useRouter } from "next/router";

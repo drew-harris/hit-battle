@@ -43,6 +43,8 @@ export default function AdminHome() {
       />
       <DashboardItem
         title="Songs With Previews"
+        linkLabel="Songs without Previews"
+        href="/admin/no-preview"
         value={data?.previewUrlCount}
       />
       <DashboardItem title="Total Votes" value={data?.voteCount} />

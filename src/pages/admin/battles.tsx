@@ -1,6 +1,6 @@
 import { PulseLoader } from "react-spinners";
 import Button from "../../components/input/Button";
-import SimpleBattle from "../../components/battles/SimpleBattle";
+import SimpleBattle from "../../components/admin/SimpleBattle";
 import { trpc } from "../../utils/trpc";
 
 export default function Battles() {

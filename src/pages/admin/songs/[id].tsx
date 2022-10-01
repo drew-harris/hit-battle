@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Button from "../../../components/input/Button";
-import SimpleBattle from "../../../components/battles/SimpleBattle";
+import SimpleBattle from "../../../components/admin/SimpleBattle";
 import shallow from "zustand/shallow";
 import { useAudioStore } from "../../../stores/audio";
 import { trpc } from "../../../utils/trpc";

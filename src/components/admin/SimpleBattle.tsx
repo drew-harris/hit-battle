@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { BattleWithSong } from "../../types/battle";
 import { trpc } from "../../utils/trpc";
 import Button from "../input/Button";
-import SimpleSong from "../songs/SimpleSongs";
+import SimpleSong from "./SimpleSong";
 
 export default function SimpleBattle({
   battle,

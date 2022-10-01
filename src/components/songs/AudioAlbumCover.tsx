@@ -36,12 +36,14 @@ export default function AudioAlbumCover({ song }: AudioAlbumCoverProps) {
                 : ""
             }`}
           />
-          <div
-            onClick={() => start(song)}
-            className="relative grid h-full w-full cursor-pointer place-items-center rounded-md bg-black/50 opacity-0 transition-all duration-150 group-hover:opacity-100"
-          >
-            <FontAwesomeIcon color="white" icon={faPlay} size="lg" />
-          </div>
+          {song.previewUrl && (
+            <div
+              onClick={() => start(song)}
+              className="relative grid h-full w-full cursor-pointer place-items-center rounded-md bg-black/50 opacity-0 transition-all duration-150 group-hover:opacity-100"
+            >
+              <FontAwesomeIcon color="white" icon={faPlay} size="lg" />
+            </div>
+          )}
         </div>
       )}
     </>

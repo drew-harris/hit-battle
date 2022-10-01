@@ -1,6 +1,5 @@
 import { Song } from "@prisma/client";
-import Image from "next/image";
-import AudioAlbumCover from "./AudioAlbumCover";
+import AudioAlbumCover from "../songs/AudioAlbumCover";
 
 interface SimpleSongProps {
   song: Song;

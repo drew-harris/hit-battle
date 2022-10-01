@@ -3,7 +3,7 @@ import { useState } from "react";
 import { DebounceInput } from "react-debounce-input";
 import Button from "../../components/input/Button";
 import Input from "../../components/input/Input";
-import SimpleSong from "../../components/songs/SimpleSongs";
+import SimpleSong from "../../components/admin/SimpleSong";
 import { thisMorning } from "../../server/utils/dates";
 import { trpc } from "../../utils/trpc";
 

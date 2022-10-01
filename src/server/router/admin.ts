@@ -111,7 +111,18 @@ export const adminRouter = createAdminRouter()
         const data =
           (await response.json()) as SpotifyApi.ArtistsAlbumsResponse;
 
-        const albums = data.items;
+        let albums = data.items;
+
+        // Hopefully remove clean versions of albums
+        // Still speeds things up
+        albums = albums.reduce((acc, album) => {
+          return acc.find((a) => a.name === album.name) ? acc : [...acc, album];
+        }, [] as SpotifyApi.AlbumObjectSimplified[]);
+
+        console.log(
+          "Albums: ",
+          albums.map((a) => `${a.id} - ${a.name} - ${a.external_urls.spotify}`)
+        );
 
         for (const album of albums) {
           if (!token) {
@@ -185,6 +196,8 @@ export const adminRouter = createAdminRouter()
 
   .mutation("nuke-all-songs", {
     resolve: async ({ ctx }) => {
+      await ctx.prisma.vote.deleteMany({});
+      await ctx.prisma.battle.deleteMany({});
       await ctx.prisma.song.deleteMany({});
       return null;
     },
@@ -526,6 +539,21 @@ export const adminRouter = createAdminRouter()
       } catch (error) {
         console.log(error);
         throw new Error("Error adding vote");
+      }
+    },
+  })
+
+  .query("no-preview", {
+    resolve: async ({ ctx }) => {
+      try {
+        const songs = await ctx.prisma.song.findMany({
+          where: {
+            previewUrl: null,
+          },
+        });
+        return songs;
+      } catch (error) {
+        throw new Error("Error getting no-preview");
       }
     },
   });

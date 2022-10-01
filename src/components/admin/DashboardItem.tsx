@@ -8,29 +8,35 @@ interface DashboardItemProps {
   href?: string;
   linkLabel?: string;
   size?: "small" | "medium" | "large";
+  noValue?: boolean;
 }
-export default function DashboardItem(props: DashboardItemProps) {
+export default function DashboardItem({
+  title,
+  value,
+  children,
+  href,
+  linkLabel,
+  size = "medium",
+}: DashboardItemProps) {
   return (
     <div className="rounded-lg bg-tan-100  p-4 text-center shadow-md">
-      {props.title && <div className="mb-2">{props.title}</div>}
-      {props.value || props.value === 0 ? (
+      {title && <div className="mb-2">{title}</div>}
+      {value || value === 0 ? (
         <div
-          className={`${
-            props.size === "small" ? "text-xl" : "text-3xl"
-          } font-bold`}
+          className={`${size === "small" ? "text-xl" : "text-3xl"} font-bold`}
         >
-          {props.value}
+          {value}
         </div>
       ) : (
         <div className="text-tan- mt-4">
           <PulseLoader size={6} color="rgb(84, 71, 56)" />
         </div>
       )}
-      {props.children && <div>{props.children}</div>}
-      {props.href && props.linkLabel && (
-        <div className={props.title || props.children ? "mt-4" : ""}>
-          <Link href={props.href}>
-            <a className=" text-tan-500 underline">{props.linkLabel}</a>
+      {children && <div>{children}</div>}
+      {href && linkLabel && (
+        <div className={title || children ? "mt-4" : ""}>
+          <Link href={href}>
+            <a className=" text-tan-500 underline">{linkLabel}</a>
           </Link>
         </div>
       )}

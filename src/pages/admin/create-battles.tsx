@@ -2,7 +2,7 @@ import { Prisma } from "@prisma/client";
 import { useState } from "react";
 import Button from "../../components/input/Button";
 import Input from "../../components/input/Input";
-import SimpleBattle from "../../components/battles/SimpleBattle";
+import SimpleBattle from "../../components/admin/SimpleBattle";
 import { thisMorning } from "../../server/utils/dates";
 import { inferMutationOutput, trpc, vanilla } from "../../utils/trpc";
 
