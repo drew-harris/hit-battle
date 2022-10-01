@@ -49,7 +49,7 @@ model User {
 
     isMod Boolean @default(false)
 
-    pointsBeforeReset Int @default(0)
+    points Int @default(0)
 
     song   Song?   @relation(fields: [songId], references: [id])
     songId String?
@@ -101,6 +101,8 @@ model Match {
 
     songs Song[]
     votes Vote[]
+
+    voteCounts Int[]
 
     comments Comment[]
 }

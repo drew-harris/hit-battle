@@ -358,6 +358,7 @@ export const adminRouter = createAdminRouter()
             songs: {
               connect: group.map((song) => ({ id: song.id })),
             },
+            voteCounts: Array(group.length).fill(0),
             startDate: input.startDate,
             endDate:
               input.endDate ||
@@ -398,7 +399,7 @@ export const adminRouter = createAdminRouter()
     resolve: async ({ ctx }) => {
       try {
         const matches = await ctx.prisma.match.findMany({
-          orderBy: [{ startDate: "asc" }],
+          orderBy: [{ startDate: "asc" }, { id: "asc" }],
           include: {
             songs: true,
           },
@@ -414,6 +415,7 @@ export const adminRouter = createAdminRouter()
   .mutation("delete-matches", {
     resolve: async ({ ctx }) => {
       try {
+        const votes = await ctx.prisma.vote.deleteMany({});
         const matches = await ctx.prisma.match.deleteMany({});
         return matches;
       } catch (error: unknown) {
@@ -458,8 +460,9 @@ export const adminRouter = createAdminRouter()
       forSongId: z.string(),
     }),
     resolve: async ({ ctx, input }) => {
+      console.log("ADMIN ADD VOTE", input);
       try {
-        const added = ctx.prisma.vote.create({
+        const addedPromise = ctx.prisma.vote.create({
           data: {
             match: {
               connect: { id: input.matchId },
@@ -472,8 +475,56 @@ export const adminRouter = createAdminRouter()
             },
           },
         });
-        return added;
+
+        const latestCountsPromise = ctx.prisma.match.findFirst({
+          where: {
+            id: input.matchId,
+          },
+          select: {
+            voteCounts: true,
+            songs: {
+              select: {
+                id: true,
+              },
+            },
+          },
+        });
+
+        const [addedVote, latestCounts] = await Promise.all([
+          addedPromise,
+          latestCountsPromise,
+        ]);
+
+        console.log("ADMIN ADD VOTE", addedVote, latestCounts);
+
+        if (!latestCounts || !latestCounts.songs) {
+          throw new Error("Error adding vote");
+        }
+
+        const newCounts = latestCounts.voteCounts.map((count, i) => {
+          if (latestCounts?.songs[i]?.id === input.forSongId) {
+            return count + 1;
+          }
+          return count;
+        });
+
+        console.log("NEW COUNTS", newCounts);
+
+        const updated = await ctx.prisma.match.update({
+          where: { id: input.matchId },
+          data: {
+            voteCounts: {
+              set: newCounts,
+            },
+          },
+          include: {
+            songs: true,
+          },
+        });
+
+        return { addedVote, match: updated };
       } catch (error) {
+        console.log(error);
         throw new Error("Error adding vote");
       }
     },

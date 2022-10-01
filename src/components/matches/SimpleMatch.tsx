@@ -56,7 +56,15 @@ export default function SimpleMatch({
             key={song.id}
             className="bg-tan-200"
           >
-            <Button onClick={() => addVote(song.id)}>Add vote</Button>
+            <>
+              <Button
+                disabled={addVoteMutation.isLoading}
+                onClick={() => addVote(song.id)}
+              >
+                Add vote
+              </Button>
+              <div className="ml-4 mr-2">{match.voteCounts[index]}</div>
+            </>
           </SimpleSong>
         ))}
       </div>
