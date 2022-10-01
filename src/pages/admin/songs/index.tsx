@@ -36,7 +36,7 @@ export default function SongsPage() {
 
   const deleteSong = (id: string) => {
     client.setQueryData(
-      ["admin.all-songs", { page: page }],
+      ["admin.all-songs", { page: page, query: searchQuery }],
       (data) => data?.filter((song) => song.id !== id) || []
     );
     deleteMutation.mutate(id, {

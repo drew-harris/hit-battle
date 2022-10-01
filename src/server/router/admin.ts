@@ -146,7 +146,6 @@ export const adminRouter = createAdminRouter()
                 track.artists[0]?.name === input.name
             )
             .map((track) => {
-              console.log("PREVIEW URL: ", track.preview_url);
               return {
                 album: album.name,
                 artist: track?.artists[0]?.name || input.name,

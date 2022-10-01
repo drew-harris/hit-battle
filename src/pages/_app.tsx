@@ -11,13 +11,15 @@ import "../styles/globals.css";
 import Head from "next/head";
 import Layout from "../views/Layout";
 import { getBaseUrl, trpc } from "../utils/trpc";
+import AudioPlayer from "../components/overlays/AudioPlayer";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { ...pageProps },
 }) => {
-  const { data: session, status } = trpc.useQuery(["my-session"], {
+  const { data: session } = trpc.useQuery(["my-session"], {
     ssr: true,
+    refetchOnWindowFocus: false,
   });
 
   return (
@@ -27,6 +29,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
       </Head>
       <Layout initialSession={session}>
         <Component {...pageProps} />
+        <AudioPlayer />
       </Layout>
     </SessionProvider>
   );

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Session } from "next-auth";
 import { useRouter } from "next/router";
 import useQuickSession from "../hooks/quickLocalSession";
+import { useAudioStore } from "../stores/audio";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -18,6 +19,7 @@ interface Route {
 
 export default function Layout({ children, initialSession }: LayoutProps) {
   const session = useQuickSession(initialSession);
+  const songPlaying = useAudioStore((state) => !!state.currentSong);
 
   if (!session) {
     return <>{children}</>;
@@ -62,7 +64,9 @@ export default function Layout({ children, initialSession }: LayoutProps) {
           return <RouteButton route={route} key={route.path}></RouteButton>;
         })}
       </nav>
-      <div className="w-full px-4 pb-8 md:px-8">{children}</div>
+      <div className={`w-full px-4 md:px-8 ${songPlaying ? "pb-20" : "pb-8"}`}>
+        {children}
+      </div>
     </>
   );
 }

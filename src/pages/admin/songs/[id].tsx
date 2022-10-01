@@ -1,11 +1,21 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
+import Button from "../../../components/input/Button";
 import SimpleMatch from "../../../components/matches/SimpleMatch";
+import shallow from "zustand/shallow";
+import { useAudioStore } from "../../../stores/audio";
 import { trpc } from "../../../utils/trpc";
 
 export default function SingleSongAdminPage() {
   const router = useRouter();
   const { id } = router.query;
+  const { start, togglePause } = useAudioStore(
+    (state) => ({
+      start: state.start,
+      togglePause: state.togglePause,
+    }),
+    shallow
+  );
   const { data: song } = trpc.useQuery(["songs.song", id as string]);
   if (!song) return <div>Loading...</div>;
   return (
@@ -37,7 +47,20 @@ export default function SingleSongAdminPage() {
         {song.previewUrl && (
           <div>
             <div className="text-xl">Audio</div>
-            <audio controls src={song.previewUrl}></audio>
+            <Button
+              onClick={() => {
+                start(song);
+              }}
+            >
+              Start
+            </Button>
+            <Button
+              onClick={() => {
+                togglePause();
+              }}
+            >
+              Pause
+            </Button>
           </div>
         )}
 
