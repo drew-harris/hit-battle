@@ -1,5 +1,7 @@
 import { useRouter } from "next/router";
 import { MatchWithSong } from "../../types/match";
+import { trpc } from "../../utils/trpc";
+import Button from "../input/Button";
 import SimpleSong from "../songs/SimpleSongs";
 
 export default function SimpleMatch({
@@ -10,13 +12,27 @@ export default function SimpleMatch({
 }: {
   match: MatchWithSong;
   showDate?: boolean;
-  className?:       string;
+  className?: string;
   chidren?: React.ReactNode;
 }) {
   const router = useRouter();
+  const addVoteMutation = trpc.useMutation("admin.add-vote");
+  const client = trpc.useContext();
+  const addVote = async (forSongId: string) => {
+    await addVoteMutation.mutate(
+      {
+        matchId: match.id,
+        forSongId: forSongId,
+      },
+      {
+        onSuccess: () => {
+          client.invalidateQueries(["admin.all-matches"]);
+        },
+      }
+    );
+  };
   return (
-
-        <div
+    <div
       className={
         "flex  flex-col rounded-md border border-white bg-tan-100 p-2 shadow-md " +
         className
@@ -33,13 +49,15 @@ export default function SimpleMatch({
       <div
         className={`flex flex-col md:grid grid-cols-${match.songs.length} gap-2`}
       >
-        {match.songs.map((song) => (
+        {match.songs.map((song, index) => (
           <SimpleSong
             onClickTitle={() => router.push("/admin/songs/" + song.id)}
             song={song}
             key={song.id}
             className="bg-tan-200"
-          />
+          >
+            <Button onClick={() => addVote(song.id)}>Add vote</Button>
+          </SimpleSong>
         ))}
       </div>
       {chidren && <div className="flex items-center">{chidren}</div>}

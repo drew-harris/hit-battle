@@ -39,7 +39,7 @@ export default function SingleSongAdminPage() {
           <div className="">{song.artist}</div>
           <div className="mb-2 ">{song.album}</div>
           <div className="">{song.matches.length} Battles</div>
-          <div className="">{song.forVotes.length} Votes</div>
+          <div className="">{song.votes.length} Votes</div>
         </div>
       </div>
 

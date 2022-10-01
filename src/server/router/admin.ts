@@ -201,7 +201,7 @@ export const adminRouter = createAdminRouter()
           const songs = await ctx.prisma.song.findMany({
             where: {
               title: {
-                search: input.query,
+                contains: input.query,
               },
             },
           });
@@ -243,7 +243,7 @@ export const adminRouter = createAdminRouter()
       const totalMatchCountPromise = ctx.prisma.match.count();
 
       const mostPopularSongPromise = ctx.prisma.song.findFirst({
-        orderBy: [{ forVotes: { _count: "asc" } }],
+        orderBy: [{ votes: { _count: "asc" } }],
       });
 
       const previewUrlCountPromise = ctx.prisma.song.count({
@@ -448,6 +448,33 @@ export const adminRouter = createAdminRouter()
         return match;
       } catch (error) {
         throw new Error("Error creating custom match");
+      }
+    },
+  })
+
+  .mutation("add-vote", {
+    input: z.object({
+      matchId: z.string(),
+      forSongId: z.string(),
+    }),
+    resolve: async ({ ctx, input }) => {
+      try {
+        const added = ctx.prisma.vote.create({
+          data: {
+            match: {
+              connect: { id: input.matchId },
+            },
+            for: {
+              connect: { id: input.forSongId },
+            },
+            user: {
+              connect: { id: ctx.session.user.id },
+            },
+          },
+        });
+        return added;
+      } catch (error) {
+        throw new Error("Error adding vote");
       }
     },
   });
