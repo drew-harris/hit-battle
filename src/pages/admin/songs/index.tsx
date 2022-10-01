@@ -18,7 +18,9 @@ export default function SongsPage() {
   ]);
 
   useEffect(() => {
-    client.prefetchQuery(["admin.all-songs", { page: page + 1, query: "" }]);
+    if (searchQuery === "") {
+      client.prefetchQuery(["admin.all-songs", { page: page + 1, query: "" }]);
+    }
   }, [page, client]);
 
   const nukeMutation = trpc.useMutation(["admin.nuke-all-songs"]);
