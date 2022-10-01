@@ -21,7 +21,7 @@ export default function SongsPage() {
     if (searchQuery === "") {
       client.prefetchQuery(["admin.all-songs", { page: page + 1, query: "" }]);
     }
-  }, [page, client]);
+  }, [page, client, searchQuery]);
 
   const nukeMutation = trpc.useMutation(["admin.nuke-all-songs"]);
   const deleteMutation = trpc.useMutation(["admin.delete-song"]);
