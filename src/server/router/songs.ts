@@ -46,7 +46,7 @@ export const songRouter = createProtectedRouter()
             id: input,
           },
           include: {
-            matches: {
+            battles: {
               include: {
                 songs: true,
               },

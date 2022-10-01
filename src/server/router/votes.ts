@@ -7,7 +7,7 @@ export const votesRouter = createProtectedRouter().query("votes", {
     try {
       const votes = await ctx.prisma.vote.aggregate({
         where: {
-          matchId: input,
+          battleId: input,
         },
         _count: {
           forId: true,

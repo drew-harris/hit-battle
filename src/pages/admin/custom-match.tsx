@@ -7,32 +7,32 @@ import SimpleSong from "../../components/songs/SimpleSongs";
 import { thisMorning } from "../../server/utils/dates";
 import { trpc } from "../../utils/trpc";
 
-export default function CustomMatch() {
+export default function CustomBattle() {
   const [songs, setSongs] = useState<Song[]>([]);
   const [queryString, setQueryString] = useState("");
   const { data: searchResults } = trpc.useQuery([
     "songs.search-songs",
     queryString,
   ]);
-  const submitMatchMutation = trpc.useMutation("admin.create-custom-match");
+  const submitBattleMutation = trpc.useMutation("admin.create-custom-battle");
   const inputClassName = "p-2 rounded-md bg-tan-200 ";
-  const [matchTitle, setMatchTitle] = useState("");
+  const [battleTitle, setBattleTitle] = useState("");
   const [startDate, setStartDate] = useState(thisMorning().toISOString());
   const [endDate, setEndDate] = useState("");
 
-  const submitMatch = () => {
-    console.log("submitting match");
-    submitMatchMutation.mutate(
+  const submitBattle = () => {
+    console.log("submitting battle");
+    submitBattleMutation.mutate(
       {
         songs: songs,
         startDate: new Date(startDate),
         endDate: endDate ? new Date(endDate) : null,
-        title: matchTitle || null,
+        title: battleTitle || null,
       },
       {
         onSettled: () => {
           setSongs([]);
-          setMatchTitle("");
+          setBattleTitle("");
           setStartDate(new Date().toISOString());
           setEndDate("");
         },
@@ -42,7 +42,7 @@ export default function CustomMatch() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">Custom Match</h1>
+      <h1 className="text-2xl font-bold">Custom Battle</h1>
       <div className="rounded-xl bg-tan-100 p-4">
         <div className="">
           <DebounceInput
@@ -94,12 +94,12 @@ export default function CustomMatch() {
         </div>
       </div>
       <div className="my-4 rounded-xl bg-tan-100 p-4">
-        <div className="mb-4">Match Settings</div>
+        <div className="mb-4">Battle Settings</div>
         <div className="flex gap-4">
           <Input
-            label="Match Title"
-            value={matchTitle}
-            onChange={(e) => setMatchTitle(e.target.value)}
+            label="Battle Title"
+            value={battleTitle}
+            onChange={(e) => setBattleTitle(e.target.value)}
             className={inputClassName}
           />
           <Input
@@ -117,7 +117,9 @@ export default function CustomMatch() {
           />
         </div>
       </div>
-      {songs.length > 1 && <Button onClick={submitMatch}>Create Match</Button>}
+      {songs.length > 1 && (
+        <Button onClick={submitBattle}>Create Battle</Button>
+      )}
     </div>
   );
 }

@@ -24,22 +24,22 @@ export default function AdminHome() {
         linkLabel="Add Artist"
       />
       <DashboardItem
-        title="Current Matches"
-        value={data?.currentMatchCount}
-        href="/admin/matches"
-        linkLabel="View Matches"
+        title="Current Battles"
+        value={data?.currentBattleCount}
+        href="/admin/battles"
+        linkLabel="View Battles"
       />
       <DashboardItem
-        title="Total Matches"
-        value={data?.totalMatchCount}
-        href="/admin/create-matches"
-        linkLabel="Create Matches"
+        title="Total Battles"
+        value={data?.totalBattleCount}
+        href="/admin/create-battles"
+        linkLabel="Create Battles"
       />
       <DashboardItem
-        linkLabel="Create Custom Match"
-        href="/admin/custom-match"
-        title="Custom Matches"
-        value={data?.customMatchCount}
+        linkLabel="Create Custom Battle"
+        href="/admin/custom-battle"
+        title="Custom Battles"
+        value={data?.customBattleCount}
       />
       <DashboardItem
         title="Songs With Previews"

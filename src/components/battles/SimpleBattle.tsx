@@ -1,16 +1,16 @@
 import { useRouter } from "next/router";
-import { MatchWithSong } from "../../types/match";
+import { BattleWithSong } from "../../types/battle";
 import { trpc } from "../../utils/trpc";
 import Button from "../input/Button";
 import SimpleSong from "../songs/SimpleSongs";
 
-export default function SimpleMatch({
-  match,
+export default function SimpleBattle({
+  battle,
   showDate = false,
   className,
   chidren,
 }: {
-  match: MatchWithSong;
+  battle: BattleWithSong;
   showDate?: boolean;
   className?: string;
   chidren?: React.ReactNode;
@@ -21,12 +21,12 @@ export default function SimpleMatch({
   const addVote = async (forSongId: string) => {
     await addVoteMutation.mutate(
       {
-        matchId: match.id,
+        battleId: battle.id,
         forSongId: forSongId,
       },
       {
         onSuccess: () => {
-          client.invalidateQueries(["admin.all-matches"]);
+          client.invalidateQueries(["admin.all-battles"]);
         },
       }
     );
@@ -40,16 +40,16 @@ export default function SimpleMatch({
     >
       {showDate && (
         <div className="mb-2 text-center">
-          {match.startDate.toLocaleString()}
+          {battle.startDate.toLocaleString()}
         </div>
       )}
-      {match.title && (
-        <div className="text-center text-2xl font-bold">{match.title}</div>
+      {battle.title && (
+        <div className="text-center text-2xl font-bold">{battle.title}</div>
       )}
       <div
-        className={`flex flex-col md:grid grid-cols-${match.songs.length} gap-2`}
+        className={`flex flex-col md:grid grid-cols-${battle.songs.length} gap-2`}
       >
-        {match.songs.map((song, index) => (
+        {battle.songs.map((song, index) => (
           <SimpleSong
             onClickTitle={() => router.push("/admin/songs/" + song.id)}
             song={song}
@@ -63,7 +63,7 @@ export default function SimpleMatch({
               >
                 Add vote
               </Button>
-              <div className="ml-4 mr-2">{match.voteCounts[index]}</div>
+              <div className="ml-4 mr-2">{battle.voteCounts[index]}</div>
             </>
           </SimpleSong>
         ))}

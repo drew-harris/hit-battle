@@ -1,18 +1,18 @@
 import { PulseLoader } from "react-spinners";
 import Button from "../../components/input/Button";
-import SimpleMatch from "../../components/matches/SimpleMatch";
+import SimpleBattle from "../../components/battles/SimpleBattle";
 import { trpc } from "../../utils/trpc";
 
-export default function Matches() {
+export default function Battles() {
   const {
-    data: matches,
+    data: battles,
     status,
     error,
     refetch,
-  } = trpc.useQuery(["admin.all-matches"]);
-  const nukeMatchesMutation = trpc.useMutation("admin.delete-matches");
-  const nukeMatches = () => {
-    nukeMatchesMutation.mutate(null, {
+  } = trpc.useQuery(["admin.all-battles"]);
+  const nukeBattlesMutation = trpc.useMutation("admin.delete-battles");
+  const nukeBattles = () => {
+    nukeBattlesMutation.mutate(null, {
       onSettled: () => {
         refetch();
       },
@@ -21,8 +21,8 @@ export default function Matches() {
   return (
     <div>
       <div className="align-center mb-3 flex justify-between">
-        <div className="mb-3 text-2xl font-bold">Matches</div>
-        <Button onClick={nukeMatches}>Delete All</Button>
+        <div className="mb-3 text-2xl font-bold">Battles</div>
+        <Button onClick={nukeBattles}>Delete All</Button>
       </div>
       <div className="flex flex-col gap-4">
         {status === "loading" && (
@@ -33,9 +33,9 @@ export default function Matches() {
           </div>
         )}
         {status === "error" && <div>{error?.message}</div>}
-        {matches &&
-          matches.map((match) => (
-            <SimpleMatch showDate={true} match={match} key={match.id} />
+        {battles &&
+          battles.map((battle) => (
+            <SimpleBattle showDate={true} battle={battle} key={battle.id} />
           ))}
       </div>
     </div>

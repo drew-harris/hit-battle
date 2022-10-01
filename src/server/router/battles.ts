@@ -1,6 +1,6 @@
 import { createProtectedRouter } from "./context";
 
-export const matchRouter = createProtectedRouter().query("today", {
+export const battleRouter = createProtectedRouter().query("today", {
   resolve: async ({}) => {
     const rightNow = new Date();
     try {

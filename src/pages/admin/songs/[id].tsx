@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Button from "../../../components/input/Button";
-import SimpleMatch from "../../../components/matches/SimpleMatch";
+import SimpleBattle from "../../../components/battles/SimpleBattle";
 import shallow from "zustand/shallow";
 import { useAudioStore } from "../../../stores/audio";
 import { trpc } from "../../../utils/trpc";
@@ -38,7 +38,7 @@ export default function SingleSongAdminPage() {
           <div className="text-2xl font-bold">{song.title}</div>
           <div className="">{song.artist}</div>
           <div className="mb-2 ">{song.album}</div>
-          <div className="">{song.matches.length} Battles</div>
+          <div className="">{song.battles.length} Battles</div>
           <div className="">{song.votes.length} Votes</div>
         </div>
       </div>
@@ -72,12 +72,12 @@ export default function SingleSongAdminPage() {
           {song.users.length === 0 && <div className="ml-2">No users</div>}
         </div>
 
-        {song.matches && (
+        {song.battles && (
           <div className="max-w-lg">
-            <div className="text-xl">Matches</div>
+            <div className="text-xl">Battles</div>
             <div className="flex flex-col gap-4">
-              {song.matches.map((match) => (
-                <SimpleMatch showDate match={match} key={match.id} />
+              {song.battles.map((battle) => (
+                <SimpleBattle showDate battle={battle} key={battle.id} />
               ))}
             </div>
           </div>

@@ -2,7 +2,7 @@ import { Prisma, Song } from "@prisma/client";
 import shuffleArray from "shuffle-array";
 import { v4 as uuidv4 } from "uuid";
 import { z, ZodType } from "zod";
-import { MatchWithSong } from "../../types/match";
+import { BattleWithSong } from "../../types/battle";
 import { getNewToken } from "../utils/spotify";
 import { createAdminRouter } from "./context";
 
@@ -229,7 +229,7 @@ export const adminRouter = createAdminRouter()
       const userCountPromise = ctx.prisma.user.count();
       const voteCountPromise = ctx.prisma.vote.count();
       const rigntNow = new Date();
-      const currentMatchCountPromise = ctx.prisma.match.count({
+      const currentBattleCountPromise = ctx.prisma.battle.count({
         where: {
           endDate: {
             gte: rigntNow,
@@ -240,7 +240,7 @@ export const adminRouter = createAdminRouter()
         },
       });
 
-      const totalMatchCountPromise = ctx.prisma.match.count();
+      const totalBattleCountPromise = ctx.prisma.battle.count();
 
       const mostPopularSongPromise = ctx.prisma.song.findFirst({
         orderBy: [{ votes: { _count: "asc" } }],
@@ -254,7 +254,7 @@ export const adminRouter = createAdminRouter()
         },
       });
 
-      const customMatchCountPromise = ctx.prisma.match.count({
+      const customBattleCountPromise = ctx.prisma.battle.count({
         where: {
           isCustom: true,
         },
@@ -265,32 +265,32 @@ export const adminRouter = createAdminRouter()
         artistCount,
         userCount,
         voteCount,
-        currentMatchCount,
-        totalMatchCount,
+        currentBattleCount,
+        totalBattleCount,
         mostPopularSong,
         previewUrlCount,
-        customMatchCount,
+        customBattleCount,
       ] = await Promise.all([
         songsCountPromise,
         artistsCountPromise,
         userCountPromise,
         voteCountPromise,
-        currentMatchCountPromise,
-        totalMatchCountPromise,
+        currentBattleCountPromise,
+        totalBattleCountPromise,
         mostPopularSongPromise,
         previewUrlCountPromise,
-        customMatchCountPromise,
+        customBattleCountPromise,
       ]);
       return {
         songsCount,
         artistCount: artistCount.length,
         userCount,
         voteCount,
-        currentMatchCount,
-        totalMatchCount,
+        currentBattleCount,
+        totalBattleCount,
         mostPopularSong,
         previewUrlCount,
-        customMatchCount,
+        customBattleCount,
       };
     },
   })
@@ -333,9 +333,9 @@ export const adminRouter = createAdminRouter()
     },
   })
 
-  .mutation("setup-matchups", {
+  .mutation("setup-battles", {
     input: z.object({
-      numMatchups: z.number(),
+      numBattles: z.number(),
       groupSize: z.number().min(2),
       startDate: z.date(),
       endDate: z.date().optional(),
@@ -344,17 +344,17 @@ export const adminRouter = createAdminRouter()
       try {
         const songsCount = await ctx.prisma.song.count();
         const songs = await ctx.prisma.song.findMany({
-          take: input.numMatchups * input.groupSize,
+          take: input.numBattles * input.groupSize,
           skip: Math.floor(
-            Math.random() * (songsCount - input.numMatchups * input.groupSize)
+            Math.random() * (songsCount - input.numBattles * input.groupSize)
           ),
         });
         shuffleArray(songs);
 
-        const matches: Prisma.MatchCreateInput[] = [];
+        const battles: Prisma.BattleCreateInput[] = [];
         for (let i = 0; i < songs.length; i += input.groupSize) {
           const group = songs.slice(i, i + input.groupSize);
-          const match: Prisma.MatchCreateInput = {
+          const battle: Prisma.BattleCreateInput = {
             songs: {
               connect: group.map((song) => ({ id: song.id })),
             },
@@ -365,67 +365,67 @@ export const adminRouter = createAdminRouter()
               new Date(input.startDate.getTime() + 24 * 60 * 60 * 1000),
             id: uuidv4(),
           };
-          matches.push(match);
+          battles.push(battle);
         }
 
-        return matches;
+        return battles;
       } catch (error) {
-        throw new Error("could not create matchups");
+        throw new Error("could not create battles");
       }
     },
   })
 
-  .mutation("submit-matchups", {
-    input: z.array(z.any()) as ZodType<Prisma.MatchCreateInput[]>,
+  .mutation("submit-battles", {
+    input: z.array(z.any()) as ZodType<Prisma.BattleCreateInput[]>,
     resolve: async ({ ctx, input }) => {
       try {
-        const matches: MatchWithSong[] = [];
-        for (const match of input) {
-          const newMatch = await ctx.prisma.match.create({
-            data: match,
+        const battles: BattleWithSong[] = [];
+        for (const battle of input) {
+          const newBattle = await ctx.prisma.battle.create({
+            data: battle,
             include: { songs: true },
           });
 
-          matches.push(newMatch);
+          battles.push(newBattle);
         }
-        return matches;
+        return battles;
       } catch (error) {
-        throw new Error("could not submit matchups");
+        throw new Error("could not submit battles");
       }
     },
   })
 
-  .query("all-matches", {
+  .query("all-battles", {
     resolve: async ({ ctx }) => {
       try {
-        const matches = await ctx.prisma.match.findMany({
+        const battles = await ctx.prisma.battle.findMany({
           orderBy: [{ startDate: "asc" }, { id: "asc" }],
           include: {
             songs: true,
           },
         });
-        return matches;
+        return battles;
       } catch (error: unknown) {
         console.log(error);
-        throw new Error("Error getting all matches");
+        throw new Error("Error getting all battles");
       }
     },
   })
 
-  .mutation("delete-matches", {
+  .mutation("delete-battles", {
     resolve: async ({ ctx }) => {
       try {
         const votes = await ctx.prisma.vote.deleteMany({});
-        const matches = await ctx.prisma.match.deleteMany({});
-        return matches;
+        const battles = await ctx.prisma.battle.deleteMany({});
+        return battles;
       } catch (error: unknown) {
         console.log(error);
-        throw new Error("Error deleting matches");
+        throw new Error("Error deleting battles");
       }
     },
   })
 
-  .mutation("create-custom-match", {
+  .mutation("create-custom-battle", {
     input: z.object({
       songs: z.array(z.any()) as ZodType<Song[]>,
       startDate: z.date(),
@@ -434,7 +434,7 @@ export const adminRouter = createAdminRouter()
     }),
     resolve: async ({ ctx, input }) => {
       try {
-        const match = await ctx.prisma.match.create({
+        const battle = await ctx.prisma.battle.create({
           data: {
             songs: {
               connect: input.songs.map((song) => ({ id: song.id })),
@@ -447,16 +447,16 @@ export const adminRouter = createAdminRouter()
             isCustom: true,
           },
         });
-        return match;
+        return battle;
       } catch (error) {
-        throw new Error("Error creating custom match");
+        throw new Error("Error creating custom battles");
       }
     },
   })
 
   .mutation("add-vote", {
     input: z.object({
-      matchId: z.string(),
+      battleId: z.string(),
       forSongId: z.string(),
     }),
     resolve: async ({ ctx, input }) => {
@@ -464,8 +464,8 @@ export const adminRouter = createAdminRouter()
       try {
         const addedPromise = ctx.prisma.vote.create({
           data: {
-            match: {
-              connect: { id: input.matchId },
+            battle: {
+              connect: { id: input.battleId },
             },
             for: {
               connect: { id: input.forSongId },
@@ -476,9 +476,9 @@ export const adminRouter = createAdminRouter()
           },
         });
 
-        const latestCountsPromise = ctx.prisma.match.findFirst({
+        const latestCountsPromise = ctx.prisma.battle.findFirst({
           where: {
-            id: input.matchId,
+            id: input.battleId,
           },
           select: {
             voteCounts: true,
@@ -510,8 +510,8 @@ export const adminRouter = createAdminRouter()
 
         console.log("NEW COUNTS", newCounts);
 
-        const updated = await ctx.prisma.match.update({
-          where: { id: input.matchId },
+        const updated = await ctx.prisma.battle.update({
+          where: { id: input.battleId },
           data: {
             voteCounts: {
               set: newCounts,
@@ -522,7 +522,7 @@ export const adminRouter = createAdminRouter()
           },
         });
 
-        return { addedVote, match: updated };
+        return { addedVote, battle: updated };
       } catch (error) {
         console.log(error);
         throw new Error("Error adding vote");

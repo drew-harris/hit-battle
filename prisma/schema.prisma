@@ -86,11 +86,11 @@ model Song {
 
     stemifyLink String?
 
-    matches Match[]
-    votes   Vote[]  @relation("forVotes")
+    battles Battle[]
+    votes   Vote[]   @relation("forVotes")
 }
 
-model Match {
+model Battle {
     id         String   @id @unique @default(cuid())
     startDate  DateTime
     endDate    DateTime
@@ -115,15 +115,15 @@ model Comment {
     user   User   @relation(fields: [userId], references: [id])
     userId String
 
-    match   Match  @relation(fields: [matchId], references: [id])
-    matchId String
+    battle   Battle @relation(fields: [battleId], references: [id])
+    battleId String
 }
 
 model Vote {
     id String @id @unique @default(cuid())
 
-    match   Match  @relation(fields: [matchId], references: [id])
-    matchId String
+    battle   Battle @relation(fields: [battleId], references: [id])
+    battleId String
 
     user   User   @relation(fields: [userId], references: [id])
     userId String
