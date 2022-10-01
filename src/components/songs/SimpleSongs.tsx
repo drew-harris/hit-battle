@@ -1,5 +1,6 @@
 import { Song } from "@prisma/client";
 import Image from "next/image";
+import AudioAlbumCover from "./AudioAlbumCover";
 
 interface SimpleSongProps {
   song: Song;
@@ -23,19 +24,7 @@ export default function SimpleSong({
       }
     >
       <div className="flex items-center overflow-hidden truncate">
-        {song.albumArt && (
-          <div className="relative h-10 w-10 shrink-0 grow">
-            <Image
-              alt={song.title}
-              src={song.albumArt}
-              loading="lazy"
-              placeholder="blur"
-              blurDataURL={song.loaderAlbumArt || " "}
-              layout="fill"
-              className="rounded-md"
-            />
-          </div>
-        )}
+        {song.albumArt && <AudioAlbumCover song={song} />}
         <div className="ml-2 truncate">
           <p
             className={`truncate font-bold ${

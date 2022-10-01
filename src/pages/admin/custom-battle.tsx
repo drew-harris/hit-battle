@@ -95,7 +95,7 @@ export default function CustomBattle() {
       </div>
       <div className="my-4 rounded-xl bg-tan-100 p-4">
         <div className="mb-4">Battle Settings</div>
-        <div className="flex gap-4">
+        <div className="flex flex-col gap-4 md:flex-row">
           <Input
             label="Battle Title"
             value={battleTitle}

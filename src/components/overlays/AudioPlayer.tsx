@@ -44,14 +44,14 @@ export default function AudioPlayer() {
           </div>
         </div>
         <div className="flex gap-3">
-          <div onClick={togglePause} className="w-8 p-2 pl-3">
+          <div onClick={togglePause} className="w-8 cursor-pointer p-2 pl-3">
             {paused ? (
               <FontAwesomeIcon icon={faPlay} size="lg" />
             ) : (
               <FontAwesomeIcon icon={faPause} size="lg" />
             )}
           </div>
-          <div onClick={stop} className="w-8 p-2">
+          <div onClick={stop} className="w-8 cursor-pointer p-2">
             <FontAwesomeIcon icon={faStop} size="lg" />
           </div>
         </div>

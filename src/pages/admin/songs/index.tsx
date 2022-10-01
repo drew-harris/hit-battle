@@ -48,9 +48,11 @@ export default function SongsPage() {
 
   return (
     <div>
-      <div className="mb-4 flex justify-between">
-        <div className="items flex items-end gap-8">
-          <h1 className="text-3xl font-bold text-tan-500">All Songs</h1>
+      <div className="mb-4 flex flex-col justify-between md:flex-row">
+        <div className="items flex flex-col gap-8 md:flex-row md:items-end">
+          <h1 className="text-center text-3xl font-bold text-tan-500">
+            All Songs
+          </h1>
           <DebounceInput
             debounceTimeout={400}
             element={Input}
@@ -62,7 +64,7 @@ export default function SongsPage() {
           />
         </div>
         <Button
-          className="mb-3"
+          className="mb-3 mt-4 hidden md:block"
           onClick={nuke}
           disabled={nukeMutation.isLoading}
         >

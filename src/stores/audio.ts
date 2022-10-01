@@ -25,19 +25,6 @@ export const useAudioStore = create<AudioState>((set, get) => ({
     }
     if (!song.previewUrl) return;
     const audio = new Audio(song.previewUrl);
-    audio.volume = 0;
-    // Fade in
-    // TODO: Customize fading
-    function fadeIn() {
-      console.log(audio.volume);
-      if (audio.currentTime < 0.5) {
-        audio.volume = audio.currentTime / 0.5;
-      } else {
-        removeEventListener("timeupdate", fadeIn);
-      }
-    }
-
-    audio.addEventListener("timeupdate", fadeIn);
     audio.addEventListener("ended", () => {
       audio.currentTime = 0;
       audio.pause();

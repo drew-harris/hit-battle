@@ -13,7 +13,7 @@ export default function Input(props: InputProps) {
       <input
         className={`rounded-md bg-${
           bg ? bg : "tan-200"
-        } border-2 border-transparent p-2 focus:border-2 focus:border-tan-500 focus:outline-none ${
+        } w-full border-2 border-transparent p-2 focus:border-2 focus:border-tan-500 focus:outline-none md:w-auto ${
           className || ""
         } `}
         {...rest}

@@ -27,6 +27,8 @@ export default function SimpleBattle({
       {
         onSuccess: () => {
           client.invalidateQueries(["admin.all-battles"]);
+          client.invalidateQueries(["songs.song", battle?.songs[0]?.id]);
+          client.invalidateQueries(["songs.song", battle?.songs[1]?.id]);
         },
       }
     );

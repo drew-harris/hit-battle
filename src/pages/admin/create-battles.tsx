@@ -75,7 +75,7 @@ export default function CreateBattlesPage() {
   return (
     <div>
       <h1 className="text-2xl font-bold">Create Battles</h1>
-      <div className=" mt-4 flex  flex-wrap justify-center gap-2 sm:justify-start">
+      <div className=" mt-4 flex flex-col flex-wrap  justify-center gap-2 sm:justify-start md:flex-row">
         <Input
           label="Group Size"
           bg="tan-100"
