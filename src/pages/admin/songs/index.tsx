@@ -6,8 +6,10 @@ import Pagination from "../../../components/input/Pagination";
 import { useRouter } from "next/router";
 import Input from "../../../components/input/Input";
 import { DebounceInput } from "react-debounce-input";
+import { useNotifications } from "../../../stores/notifications";
 
 export default function SongsPage() {
+  const sendNotification = useNotifications((state) => state.sendNotification);
   const [page, setPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
@@ -42,8 +44,12 @@ export default function SongsPage() {
       (data) => data?.filter((song) => song.id !== id) || []
     );
     deleteMutation.mutate(id, {
-      onError: () => {
+      onError: (error) => {
         refetch();
+        sendNotification(error.message, true);
+      },
+      onSuccess: () => {
+        sendNotification("Song deleted");
       },
     });
   };

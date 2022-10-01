@@ -47,6 +47,8 @@ model User {
     accounts      Account[]
     sessions      Session[]
 
+    createdAt DateTime @default(now())
+
     isMod Boolean @default(false)
 
     points Int @default(0)
@@ -70,6 +72,9 @@ model Song {
     id    String @id @unique @default(uuid())
     title String
     users User[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
 
     artist         String
     artistId       String

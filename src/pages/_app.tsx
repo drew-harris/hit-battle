@@ -2,16 +2,17 @@
 import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
 import { loggerLink } from "@trpc/client/links/loggerLink";
 import { withTRPC } from "@trpc/next";
-import { SessionProvider } from "next-auth/react";
-import superjson from "superjson";
-import type { AppType } from "next/app";
-import type { AppRouter } from "../server/router";
 import type { Session } from "next-auth";
-import "../styles/globals.css";
+import { SessionProvider } from "next-auth/react";
+import type { AppType } from "next/app";
 import Head from "next/head";
-import Layout from "../views/Layout";
-import { getBaseUrl, trpc } from "../utils/trpc";
+import superjson from "superjson";
 import AudioPlayer from "../components/overlays/AudioPlayer";
+import Notifications from "../components/overlays/Notifications";
+import type { AppRouter } from "../server/router";
+import "../styles/globals.css";
+import { getBaseUrl, trpc } from "../utils/trpc";
+import Layout from "../views/Layout";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -30,6 +31,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <Layout initialSession={session}>
         <Component {...pageProps} />
         <AudioPlayer />
+        <Notifications />
       </Layout>
     </SessionProvider>
   );

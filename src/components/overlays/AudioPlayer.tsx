@@ -2,7 +2,6 @@ import { faPause, faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Transition } from "@headlessui/react";
 import Image from "next/image";
-import { useState } from "react";
 import { useAudioStore } from "../../stores/audio";
 
 export default function AudioPlayer() {

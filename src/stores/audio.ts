@@ -31,7 +31,13 @@ export const useAudioStore = create<AudioState>((set, get) => ({
       set({ paused: true });
     });
     audio.addEventListener("change", () => set({ paused: audio.paused }));
-    audio.play();
+    audio.load();
+    // Play when loaded
+    audio.addEventListener("canplaythrough", () => {
+      audio.play();
+      set({ paused: false });
+    });
+
     set({ audio, currentSong: song, paused: false, showPlayer: true });
   },
 
