@@ -23,7 +23,7 @@ export default function AudioPlayer() {
       leaveTo="transform sm:opacity-0 sm:translate-x-[-100%] translate-y-[-100%] sm:translate-y-0"
       leaveFrom="transform opacity-100 translate-x-0 translate-y-0"
     >
-      <div className="fixed bottom-0 right-0 left-0 flex items-center justify-between gap-3 rounded bg-tan-100 p-2 shadow-lg md:right-auto md:bottom-4 md:left-4">
+      <div className="fixed bottom-0 right-0 left-0 flex items-center justify-between gap-3 rounded-t-2xl border border-white bg-tan-100 p-2 shadow-2xl sm:rounded-lg md:right-auto md:bottom-4 md:left-4">
         <div className="flex gap-3 truncate">
           {currentSong?.albumArt && (
             <div className="relative h-12 w-12 shrink-0 rounded-md">
