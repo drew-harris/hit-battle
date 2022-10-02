@@ -1,0 +1,63 @@
+[
+  {
+    "paletteName": "Stemify",
+    "swatches": [
+      {
+        "name": "cool",
+        "color": "C8D4EB"
+      },
+      {
+        "name": "100",
+        "color": "EAE9E5"
+      },
+      {
+        "name": "150",
+        "color": "E2E0D9"
+      },
+      {
+        "name": "200",
+        "color": "D9D5CD"
+      },
+      {
+        "name": "250",
+        "color": "D6D0C0"
+      },
+      {
+        "name": "Edited - 300",
+        "color": "D3BDA3"
+      },
+      {
+        "name": "350",
+        "color": "C6AD8F"
+      },
+      {
+        "name": "375",
+        "color": "B39A7C"
+      },
+      {
+        "name": "400",
+        "color": "87735B"
+      },
+      {
+        "name": "450",
+        "color": "6B5B48"
+      },
+      {
+        "name": "500",
+        "color": "4F4335"
+      },
+      {
+        "name": "600",
+        "color": "312821"
+      },
+      {
+        "name": "650",
+        "color": "221B17"
+      },
+      {
+        "name": "700",
+        "color": "130F0D"
+      }
+    ]
+  }
+]
