@@ -4,7 +4,7 @@ import { trpc } from "../../utils/trpc";
 import Button from "../input/Button";
 import SimpleSong from "./SimpleSong";
 
-export default function SimpleBattle({
+export default function AdminBattle({
   battle,
   showDate = false,
   className,

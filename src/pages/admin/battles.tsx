@@ -1,6 +1,6 @@
 import { PulseLoader } from "react-spinners";
 import Button from "../../components/input/Button";
-import SimpleBattle from "../../components/admin/SimpleBattle";
+import AdminBattle from "../../components/admin/SimpleBattle";
 import { trpc } from "../../utils/trpc";
 
 export default function Battles() {
@@ -35,7 +35,7 @@ export default function Battles() {
         {status === "error" && <div>{error?.message}</div>}
         {battles &&
           battles.map((battle) => (
-            <SimpleBattle showDate={true} battle={battle} key={battle.id} />
+            <AdminBattle showDate={true} battle={battle} key={battle.id} />
           ))}
       </div>
     </div>

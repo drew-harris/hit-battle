@@ -2,7 +2,7 @@ import { Prisma } from "@prisma/client";
 import { useState } from "react";
 import Button from "../../components/input/Button";
 import Input from "../../components/input/Input";
-import SimpleBattle from "../../components/admin/SimpleBattle";
+import AdminBattle from "../../components/admin/SimpleBattle";
 import { thisMorning } from "../../server/utils/dates";
 import { inferMutationOutput, trpc, vanilla } from "../../utils/trpc";
 
@@ -136,7 +136,7 @@ export default function CreateBattlesPage() {
           <div className="flex grid-cols-2 flex-col gap-4 md:grid">
             {battles &&
               battles.map((battle) => (
-                <SimpleBattle showDate={true} battle={battle} key={battle.id} />
+                <AdminBattle showDate={true} battle={battle} key={battle.id} />
               ))}
           </div>
         </div>

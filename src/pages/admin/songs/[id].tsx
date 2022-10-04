@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Button from "../../../components/input/Button";
-import SimpleBattle from "../../../components/admin/SimpleBattle";
+import AdminBattle from "../../../components/admin/SimpleBattle";
 import shallow from "zustand/shallow";
 import { useAudioStore } from "../../../stores/audio";
 import { trpc } from "../../../utils/trpc";
@@ -77,7 +77,7 @@ export default function SingleSongAdminPage() {
             <div className="text-xl">Battles</div>
             <div className="flex flex-col gap-4">
               {song.battles.map((battle) => (
-                <SimpleBattle showDate battle={battle} key={battle.id} />
+                <AdminBattle showDate battle={battle} key={battle.id} />
               ))}
             </div>
           </div>
