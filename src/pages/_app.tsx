@@ -6,11 +6,13 @@ import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import type { AppType } from "next/app";
 import Head from "next/head";
+import { useEffect } from "react";
 import superjson from "superjson";
 import AudioPlayer from "../components/overlays/AudioPlayer";
 import AudioTip from "../components/overlays/AudioTip";
 import Notifications from "../components/overlays/Notifications";
 import type { AppRouter } from "../server/router";
+import { usePreviousVotes } from "../stores/alreadyVoted";
 import "../styles/globals.css";
 import { getBaseUrl, trpc } from "../utils/trpc";
 import Layout from "../views/Layout";
@@ -23,6 +25,12 @@ const MyApp: AppType<{ session: Session | null }> = ({
     ssr: true,
     refetchOnWindowFocus: false,
   });
+
+  const load = usePreviousVotes((state) => state.load);
+
+  useEffect(() => {
+    load();
+  }, []);
 
   return (
     <SessionProvider session={session}>

@@ -21,25 +21,13 @@ export default function AudioTip() {
       router.pathname === "/today" &&
       !(typeof window === "undefined")
     ) {
-      console.log("HERE", window);
       setHasShownTip(true);
       localStorage.setItem("hasShownTip", "true");
       setTimeout(() => {
-        console.log("ALSO HERE");
         sendNotification("Tip: You can preview songs by clicking album art");
-      }, 1000);
+      }, 5000);
     }
   }, [hasShownTip, sendNotification, router.pathname]);
 
-  function setTipShown() {
-    setHasShownTip(true);
-    localStorage.setItem("hasShownTip", "false");
-  }
-
-  return (
-    <>
-      <Button onClick={setTipShown}>RESET</Button>
-      <div>{router.pathname}</div>
-    </>
-  );
+  return <></>;
 }
