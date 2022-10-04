@@ -2,13 +2,13 @@ import { array } from "zod";
 import create from "zustand";
 
 interface PreviousVotesState {
-  matchIds: string[] | null;
+  battleIds: string[] | null;
+  loaded: boolean;
   load: () => void;
   addId: (id: string) => void;
-  didVoteAlready: (id: string) => boolean;
 }
 
-const loadMatchIds = (): string[] => {
+const loadBattleIds = (): string[] => {
   if (typeof window !== "undefined") {
     try {
       const arrayString = window.localStorage.getItem("v-ds");
@@ -31,27 +31,22 @@ const setLocalStorage = (ids: string[]) => {
 };
 
 export const usePreviousVotes = create<PreviousVotesState>((set, get) => ({
-  matchIds: null,
+  battleIds: null,
+  loaded: false,
 
   load: () => {
-    const ids = loadMatchIds();
+    const ids = loadBattleIds();
     set({
-      matchIds: ids,
+      battleIds: ids,
+      loaded: true,
     });
   },
 
   addId: (id: string) => {
+    const current = get().battleIds || [];
     set({
-      matchIds: [...(get().matchIds || []), id],
+      battleIds: [...current, id],
     });
-    setLocalStorage([...(get().matchIds || []), id]);
-  },
-
-  didVoteAlready: (id) => {
-    const matchIds = get().matchIds;
-    if (matchIds === null) {
-      return true;
-    }
-    return matchIds.includes(id);
+    setLocalStorage([...current, id]);
   },
 }));
