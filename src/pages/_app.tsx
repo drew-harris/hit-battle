@@ -30,7 +30,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
 
   useEffect(() => {
     load();
-  }, []);
+  }, [load]);
 
   return (
     <SessionProvider session={session}>

@@ -16,11 +16,9 @@ export const battleRouter = createProtectedRouter().query("today", {
         },
         include: {
           songs: true,
-          _count: {
-            select: {
-              votes: true,
-            },
-          },
+        },
+        orderBy: {
+          id: "asc",
         },
       });
 

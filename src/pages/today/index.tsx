@@ -6,7 +6,10 @@ export default function Today() {
   const { data: battles, status, error } = trpc.useQuery(["battles.today"]);
   return (
     <>
-      <PageHeader text="Today's Battles"></PageHeader>
+      <div className="flex items-baseline gap-4">
+        <PageHeader text="Today's Battles"></PageHeader>
+        <div>TODO: Add countdown</div>
+      </div>
       <div>
         {status === "loading" && <div>Loading...</div>}
         {status === "error" && <div>{error.message}</div>}
