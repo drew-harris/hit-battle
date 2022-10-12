@@ -19,6 +19,7 @@ export const useAudioStore = create<AudioState>((set, get) => ({
   showPlayer: false,
 
   start(song) {
+    console.log("starting");
     const currentAudio = get().audio;
     if (currentAudio) {
       currentAudio.pause();
@@ -42,6 +43,7 @@ export const useAudioStore = create<AudioState>((set, get) => ({
   },
 
   pause() {
+    console.log("stopping");
     const audio = get().audio;
     if (audio) {
       audio.pause();
@@ -50,6 +52,7 @@ export const useAudioStore = create<AudioState>((set, get) => ({
   },
 
   togglePause() {
+    console.log("stopping");
     const { audio, paused } = get();
     if (audio) {
       if (paused) {
@@ -64,8 +67,8 @@ export const useAudioStore = create<AudioState>((set, get) => ({
   stop() {
     const audio = get().audio;
     if (audio) {
+      console.log("stopping");
       audio.pause();
-      audio.currentTime = 0;
       set({ audio: null, paused: true, showPlayer: false });
       setTimeout(() => {
         set({ currentSong: null });
