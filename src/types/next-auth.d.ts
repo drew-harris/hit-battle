@@ -15,4 +15,8 @@ declare module "next-auth" {
     id: string;
     isMod: boolean;
   }
+
+  interface User  {
+    isMod: boolean;
+  }
 }
