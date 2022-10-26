@@ -8,7 +8,6 @@ export default function Today() {
     <>
       <div className="flex items-baseline gap-4">
         <PageHeader text="Today's Battles"></PageHeader>
-        <div>TODO: Add countdown</div>
       </div>
       <div>
         {status === "loading" && <div>Loading...</div>}
