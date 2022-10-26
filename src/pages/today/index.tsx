@@ -7,7 +7,7 @@ export default function Today() {
   return (
     <>
       <div className="flex items-baseline gap-4">
-        <PageHeader text="Todays Battles"></PageHeader>
+        <PageHeader text="Today's Battles"></PageHeader>
       </div>
       <div>
         {status === "loading" && <div>Loading...</div>}
