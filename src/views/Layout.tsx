@@ -53,7 +53,7 @@ export default function Layout({ children, initialSession }: LayoutProps) {
       <header className="flex justify-between px-4 pt-4 font-bold text-tan-500">
         <div>Stem Player Community Hit Battle</div>
         <a href="https://discord.gg/hqt4pZzyth">
-          <FontAwesomeIcon size="lg" width={20} icon={faDiscord} />
+          <FontAwesomeIcon width={20} icon={faDiscord} />
         </a>
       </header>
       <nav className="flex gap-2 overflow-x-scroll p-4 ">
