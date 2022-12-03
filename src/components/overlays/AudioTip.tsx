@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useNotifications } from "../../stores/notifications";
-import Button from "../input/Button";
 
 function getHasShownTip(): boolean {
   if (typeof window === "undefined") {

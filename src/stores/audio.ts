@@ -5,6 +5,7 @@ interface AudioState {
   audio: HTMLAudioElement | null;
   start: (song: Song) => void;
   pause: () => void;
+  isLoading: boolean;
   stop: () => void;
   togglePause: () => void;
   currentSong: Song | null;
@@ -16,6 +17,7 @@ export const useAudioStore = create<AudioState>((set, get) => ({
   audio: null,
   currentSong: null,
   paused: true,
+  isLoading: true,
   showPlayer: false,
 
   start(song) {
@@ -36,7 +38,7 @@ export const useAudioStore = create<AudioState>((set, get) => ({
     // Play when loaded
     audio.addEventListener("canplaythrough", () => {
       audio.play();
-      set({ paused: false });
+      set({ paused: false, isLoading: false });
     });
 
     set({ audio, currentSong: song, paused: false, showPlayer: true });
@@ -71,7 +73,7 @@ export const useAudioStore = create<AudioState>((set, get) => ({
       audio.pause();
       set({ audio: null, paused: true, showPlayer: false });
       setTimeout(() => {
-        set({ currentSong: null });
+        set({ currentSong: null, isLoading: true });
       }, 300);
     }
   },

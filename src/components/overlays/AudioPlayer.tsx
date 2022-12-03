@@ -2,6 +2,7 @@ import { faPause, faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Transition } from "@headlessui/react";
 import Image from "next/image";
+import { ClipLoader } from "react-spinners";
 import { useAudioStore } from "../../stores/audio";
 
 export default function AudioPlayer() {
@@ -10,6 +11,7 @@ export default function AudioPlayer() {
   const togglePause = useAudioStore((state) => state.togglePause);
   const stop = useAudioStore((state) => state.stop);
   const showPlayer = useAudioStore((state) => state.showPlayer);
+  const isLoading = useAudioStore((state) => state.isLoading);
 
   return (
     <Transition
@@ -42,7 +44,7 @@ export default function AudioPlayer() {
             <div className="">{currentSong?.artist}</div>
           </div>
         </div>
-        <div className="flex gap-3">
+        <div className="flex items-center gap-3">
           <div onClick={togglePause} className="w-8 cursor-pointer p-2 pl-3">
             {paused ? (
               <FontAwesomeIcon icon={faPlay} size="lg" />
@@ -53,6 +55,7 @@ export default function AudioPlayer() {
           <div onClick={stop} className="w-8 cursor-pointer p-2">
             <FontAwesomeIcon icon={faStop} size="lg" />
           </div>
+          {isLoading && <ClipLoader size={18} />}
         </div>
       </div>
     </Transition>
